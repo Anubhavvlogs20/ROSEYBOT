@@ -1,6 +1,8 @@
 -- ROSEY BOT v19.0 - FULL OLD + NEW LINES EDITION (800+ LINES TOTAL)
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-local Window = Rayfield:CreateWindow({Name="ROSEY BOT v19.0",Theme="Dark"})
+repeat task.wait() until Rayfield and Rayfield.CreateWindow
+-- NOW Rayfield is fully ready
+local Window = Rayfield:CreateWindow({Name="ROSEY BOT",Theme="Dark"})
 
 -- BEEP
 local beep = Instance.new("Sound",game.SoundService)
@@ -9,13 +11,14 @@ beep.SoundId="rbxassetid://6026984227"; beep.Volume=0.7
 -- CHAT (WORKS EVERYWHERE)
 local function Chat(msg)
     pcall(function()
-        if game:GetService("TextChatService").ChatVersion==Enum.ChatVersion.TextChatService then
+        if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
             game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(msg)
         else
-            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg,"All")
+            game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
         end
     end)
 end
+
 
 -- RAINBOW
 local colors = {"#FF0000","#FF7F00","#FFFF00","#00FF00","#0000FF","#4B0082","#9400D3"}
