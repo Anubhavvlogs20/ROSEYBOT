@@ -1,80 +1,137 @@
--- ROSEY BOT v19.0 - FULL OLD + NEW LINES EDITION (800+ LINES TOTAL)
+-- ROSEY BOT v2.0 - ULTIMATE EDITION (CREATED BY ROSEY, AGE 21)
+-- Load Rayfield Interface
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-repeat task.wait() until Rayfield and Rayfield.CreateWindow
--- NOW Rayfield is fully ready
-local Window = Rayfield:CreateWindow({Name="ROSEY BOT",Theme="Dark"})
+local Window = Rayfield:CreateWindow({
+    Name = "ROSEY BOT v2.0",
+    LoadingTitle = "Rosey Loading...",
+    LoadingSubtitle = "by Rosey (21)",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "ROSEYBOTv2", -- Create a custom folder for your hub/game
+        FileName = "ROSEYv2"
+    },
+    Discord = {
+        Enabled = false, -- The Discord tab button to open Discord (false/true)
+        Invite = "noinvitelink", -- The Discord invite code, do not make it your own discord link
+        RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+    },
+    KeySystem = false, -- Set this to true to use our key system
+    KeySettings = {
+        Title = "ROSEY BOT v2.0",
+        Subtitle = "Key System",
+        Note = "👋 Hello!",
+        FileName = "ROSEYv2Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+        SaveKey = true, -- The raw key can be saved, but if you change the key, you also have to change the SaveKey value: to true (false/true)
+        GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from -> This will not work for KeySystems
+        Key = "Hello" -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+    }
+})
 
--- BEEP
-local beep = Instance.new("Sound",game.SoundService)
-beep.SoundId="rbxassetid://6026984227"; beep.Volume=0.7
+-- Beep Sound
+local beep = Instance.new("Sound", game.SoundService)
+beep.SoundId = "rbxassetid://6026984227"
+beep.Volume = 0.7
 
--- CHAT (WORKS EVERYWHERE)
+-- Universal Chat Function
 local function Chat(msg)
     pcall(function()
         if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
             game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(msg)
         else
-            game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
         end
     end)
 end
 
-
--- RAINBOW
+-- Rainbow Text
 local colors = {"#FF0000","#FF7F00","#FFFF00","#00FF00","#0000FF","#4B0082","#9400D3"}
 local function rainbow(t)
     local r = ""
-    for i=1,#t do r=r.."<font color='"..colors[(i%7)+1].."'>"..t:sub(i,i).."</font>" end
+    for i = 1, #t do r = r .. "<font color='"..colors[(i%7)+1].."'>"..t:sub(i,i).."</font>" end
     return r
 end
 
 getgenv().RAINBOW = false
 
--- SEND
+-- Send Function
 local function send(text)
     local clean = text:gsub("^%[ROSEY BOT%]%s*","")
     local final = "[ROSEY BOT] "..clean
     if getgenv().RAINBOW then final = rainbow(final) end
     if setclipboard then setclipboard(final) end
     Chat(final); beep:Play()
-    Rayfield:Notify({Title="SENT",Content=final,Duration=1.8})
+    Rayfield:Notify({
+        Title = "SENT!",
+        Content = final,
+        Duration = 1.8,
+        Image = 4483362458,
+    })
 end
 
--- BUTTON & TAB
-local function btn(t,line) t:CreateButton({Name=line,Callback=function()send(line)end}) end
-local function tab(name,icon,lines)
-    local t = Window:CreateTab(name,icon)
-    local search = t:CreateInput({Name="Search",PlaceholderText="Filter...",Callback=function(q)
-        t:ClearAllChildren(); t:CreateInput(search)
-        for _,v in lines do if q=="" or v:lower():find(q:lower()) then btn(t,v) end end
-    end})
-    for _,v in lines do btn(t,v) end
+-- Button Creator
+local function btn(t, line)
+    t:CreateButton({
+        Name = line,
+        Callback = function() send(line) end
+    })
 end
 
--- HOME — FULLY FIXED
-local home = Window:CreateTab("HOME",6023426926)
-home:CreateParagraph({Title="ROSEY BOT v19.0",Content="ALL OLD + NEW LINES LOADED\nType → OKAY SEND | NO CLEAR"})
+-- Tab Creator with Search
+local function tab(name, icon, lines)
+    local t = Window:CreateTab(name, icon)
+    local search = t:CreateInput({
+        Name = "🔍 Search",
+        PlaceholderText = "Filter lines...",
+        Callback = function(q)
+            t:ClearAllChildren()
+            t:CreateInput(search)
+            for _,v in lines do
+                if q == "" or v:lower():find(q:lower()) then btn(t, v) end
+            end
+        end
+    })
+    for _,v in lines do btn(t, v) end
+end
+
+-- HOME TAB
+local home = Window:CreateTab("🏠 HOME", 6023426926)
+home:CreateParagraph({Title = "ROSEY BOT v2.0", Content = "Created by Rosey (21)\n800+ Lines | Type → OKAY SEND | NO CLEAR"})
 
 local userMessage = ""
 local inputBox = home:CreateInput({
-    Name = "Your Message",
-    PlaceholderText = "I am unstoppable!",
+    Name = "💬 Your Message",
+    PlaceholderText = "I am unstoppable! ✨",
     RemoveTextAfterFocusLost = false,
     Callback = function(text) userMessage = text end
 })
 
-home:CreateButton({Name="OKAY SEND",Callback=function()
-    if userMessage~="" then send(userMessage); userMessage=""; inputBox.CurrentText="" end
-end})
+home:CreateButton({
+    Name = "✅ OKAY SEND",
+    Callback = function()
+        if userMessage ~= "" then
+            send(userMessage)
+            userMessage = ""
+            inputBox.CurrentText = ""
+        else
+            Rayfield:Notify({Title = "Empty! 😢", Content = "Write something first!", Duration = 2})
+        end
+    end
+})
 
-home:CreateButton({Name="NO CLEAR",Callback=function()
-    userMessage=""; inputBox.CurrentText=""
-    Rayfield:Notify({Title="Cleared",Content="Ready for chaos!",Duration=1.5})
-end})
+home:CreateButton({
+    Name = "❌ NO CLEAR",
+    Callback = function()
+        userMessage = ""
+        inputBox.CurrentText = ""
+        Rayfield:Notify({Title = "Cleared! ✨", Content = "Ready for chaos!", Duration = 1.5})
+    end
+})
 
-home:CreateButton({Name="[ROSEY BOT] OK SURE",Callback=function()send("OK SURE")end})
-home:CreateButton({Name="[ROSEY BOT] NO",Callback=function()send("NO")end})
+-- Quick Buttons
+home:CreateButton({Name = "[ROSEY BOT] OK SURE ✅", Callback = function() send("OK SURE ✅") end})
+home:CreateButton({Name = "[ROSEY BOT] NO WAY ❌", Callback = function() send("NO WAY ❌") end})
 
+-- 20 ORIGINAL TABS (30 lines each, old + new)
 -- ==================== ALL 20 TABS - OLD + NEW LATEST LINES ====================
 
 tab("Greeting Lines",6023426926,{
@@ -864,12 +921,38 @@ ctrl:CreateToggle({Name="RAINBOW TEXT",Callback=function(v)getgenv().RAINBOW=v e
 ctrl:CreateToggle({Name="SPAM MODE",Callback=function(v)getgenv().SPAM=v end})
 ctrl:CreateSlider({Name="Spam Delay",Min=0.1,Max=2,Default=0.6,Callback=function(v)getgenv().DELAY=v end})
 ctrl:CreateButton({Name="Clear Chat",Callback=function()Chat("/clear")end})
+ctrl:CreateButton({Name="Rejoin Server",Callback=function()game:GetService("TeleportService"):Teleport(game.PlaceId,game.Players.LocalPlayer)end})
+ctrl:CreateButton({Name="Server Hop",Callback=function()
+    local PlaceID = game.PlaceId
+    local AllIDs = {}
+    local foundAnything = ""
+    local actualHour = os.date("!*t").hour
+    for i,v in pairs(game:GetService("HttpService"):JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..PlaceID.."/servers/Public?sortOrder=Asc&limit=100")).data) do
+        if v.playing ~= v.maxPlayers then
+            if v.id ~= game.JobId then
+                table.insert(AllIDs,v.id)
+            end
+        end
+    end
+    if #AllIDs > 0 then
+        local Random = math.random(1,#AllIDs)
+        game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID,AllIDs[Random],game.Players.LocalPlayer)
+    else
+        Rayfield:Notify({
+            Title = "ROSEY BOT",
+            Content = "No available servers found, try again later.",
+            Duration = 5,
+            Image = 4483362458
+        })
+    end
+end})
 
 -- FINAL NOTIFY
 Rayfield:Notify({
-    Title = "ROSEY BOT V3 LOADED",
-    Content = "20 TABS • 900+ LINES\nHOME: TYPE → OKAY = SEND\nNO MORE BUGS",
-    Duration = 10
+    Title = "ROSEY BOT v2.0 LOADED",
+    Content = "24 TABS • 900+ LINES • Created by Rosey (21)\nHOME: Type → OKAY = SEND\nNO MORE BUGS",
+    Duration = 10,
+    Image = 4483362458
 })
 
-print("ROSEY BOT V3 — FINAL. FLAWLESS. UNSTOPPABLE.")
+print("ROSEY BOT v2.0 — FINAL. FLAWLESS. UNSTOPPABLE. Created by Rosey, 21.")
