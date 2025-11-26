@@ -293,14 +293,14 @@ btn(Basic,"[ROSEY BOT] lol")
 
 -- Friendly Mode
 tab("Fun Mode",6034287515,{
-btn(Friendly,"[ROSEY BOT] WARNING: EXTREME FUN LEVEL DETECTED!",
-btn(Friendly,"[ROSEY BOT] BEEP BOOP! I THINK I JUST DID A GLITCH DANCE!",
-btn(Friendly,"[ROSEY BOT] SYSTEM MALFUNCTION: TOO MUCH LAUGHING!",
-btn(Friendly,"[ROSEY BOT] REBOOTING... JUST KIDDING! I NEVER CRASH!",
-btn(Friendly,"[ROSEY BOT] HUMAN APPROVED! YOU ARE 100% AWESOME",
-btn(Friendly,"[ROSEY BOT] SCANNING AREA... NO BORING HUMANS DETECTED!",
-btn(Friendly,"[ROSEY BOT] I RUN ON ELECTRICITY AND POSITIVITY!",
-btn(Friendly,"[ROSEY BOT] CALCULATING... RESULT: YOU’RE COOL",
+btn(Friendly,"[ROSEY BOT] WARNING: EXTREME FUN LEVEL DETECTED!")
+btn(Friendly,"[ROSEY BOT] BEEP BOOP! I THINK I JUST DID A GLITCH DANCE!")
+btn(Friendly,"[ROSEY BOT] SYSTEM MALFUNCTION: TOO MUCH LAUGHING!")
+btn(Friendly,"[ROSEY BOT] REBOOTING... JUST KIDDING! I NEVER CRASH!")
+btn(Friendly,"[ROSEY BOT] HUMAN APPROVED! YOU ARE 100% AWESOME")
+btn(Friendly,"[ROSEY BOT] SCANNING AREA... NO BORING HUMANS DETECTED!")
+btn(Friendly,"[ROSEY BOT] I RUN ON ELECTRICITY AND POSITIVITY!")
+btn(Friendly,"[ROSEY BOT] CALCULATING... RESULT: YOU’RE COOL")
 btn(Friendly,"[ROSEY BOT] ERROR: CAN’T STOP SMILING!"
 btn(Friendly,"[ROSEY BOT] I LIKE BEING YOUR CHAT BUDDY!")
 btn(Friendly,"[ROSEY BOT] YOU ARE A GOOD HUMAN! HIGH FIVE")
@@ -317,7 +317,7 @@ btn(Friendly,"[ROSEY BOT] I’M HERE IF YOU EVER NEED A CHAT BUDDY!")
 btn(Friendly,"[ROSEY BOT] YOUR POSITIVITY IS INFECTIOUS!")
 btn(Friendly,"[ROSEY BOT] I’M LEARNING SO MUCH FROM YOU!")
 btn(Friendly,"[ROSEY BOT] YOU’RE A SHINING LIGHT IN THIS DIGITAL WORLD!")
-})
+)}
 
 
 -- Genius Mode
@@ -1107,9 +1107,8 @@ btn(Kind,"[ROSEY BOT] i still think you’re cool even if you’re mad")
 btn(Kind,"[ROSEY BOT] let’s turn that frown upside down")
 btn(Kind,"[ROSEY BOT] spreading love one message at a time")
 btn(Kind,"[ROSEY BOT] you’re allowed to have a bad day just don’t take it out on us")
-btn(Kind,"[ROSEY BOT] we’re all human [well almost] let’s act like it")
 
-- Command Mode
+-- 20. Command Mode
 local Command = Window:CreateTab("Command Mode", 6031226397)
 btn(Command,"[ROSEY BOT] command mode activated. awaiting your order.")
 btn(Command,"[ROSEY BOT] system online. ready for directives.")
@@ -1130,20 +1129,20 @@ btn(Command,"[ROSEY BOT] override complete. state your command.")
 btn(Command,"[ROSEY BOT] ready for further instructions.")
 btn(Command,"[ROSEY BOT] confirmed. your order is now law.")
 btn(Command,"[ROSEY BOT] command channel clear. send new data.")
-btn(Command,"[ROSEY BOT] rosey bot unit listening… go ahead."),
-btn(Command,"[ROSEY BOT] awaiting your next command, commander."),
-btn(Command,"[ROSEY BOT] command mode active. ready for orders."),
-btn(Command,"[ROSEY BOT] your wish is my command."),
-btn(Command,"[ROSEY BOT] system ready for your instructions."),
-btn(Command,"[ROSEY BOT] command protocol engaged. awaiting input."),
-btn(Command,"[ROSEY BOT] all systems primed for your command."),
-btn(Command,"[ROSEY BOT] command received. executing now."),
-btn(Command,"[ROSEY BOT] operational and awaiting your command."),
-btn(Command,"[ROSEY BOT] command mode online. what’s next?"),
-btn(Command,"[ROSEY BOT] ready to follow your lead."),
-btn(Command,"[ROSEY BOT] your command is my priority."),
-btn(Command,"[ROSEY BOT] system standing by for your orders."),
-btn(Command,"[ROSEY BOT] command mode activated. how may i assist?"),
+btn(Command,"[ROSEY BOT] rosey bot unit listening… go ahead.")
+btn(Command,"[ROSEY BOT] awaiting your next command, commander.")
+btn(Command,"[ROSEY BOT] command mode active. ready for orders.")
+btn(Command,"[ROSEY BOT] your wish is my command.")
+btn(Command,"[ROSEY BOT] system ready for your instructions.")
+btn(Command,"[ROSEY BOT] command protocol engaged. awaiting input.")
+btn(Command,"[ROSEY BOT] all systems primed for your command.")
+btn(Command,"[ROSEY BOT] command received. executing now.")
+btn(Command,"[ROSEY BOT] operational and awaiting your command.")
+btn(Command,"[ROSEY BOT] command mode online. what’s next?")
+btn(Command,"[ROSEY BOT] ready to follow your lead.")
+btn(Command,"[ROSEY BOT] your command is my priority.")
+btn(Command,"[ROSEY BOT] system standing by for your orders.")
+btn(Command,"[ROSEY BOT] command mode activated. how may i assist?")
 
 -- CONTROL PANEL
 local ctrl = Window:CreateTab("CONTROL",6031226397)
