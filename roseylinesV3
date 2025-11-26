@@ -1177,5 +1177,3 @@ Rayfield:Notify({
     Content = "20 TABS • 900+ LINES\nHOME: TYPE → OKAY = SEND\nNO MORE BUGS",
     Duration = 10
 })
-
-print("ROSEY BOT V3 — FINAL. FLAWLESS. UNSTOPPABLE.")
