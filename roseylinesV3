@@ -1,6 +1,6 @@
----@diagnostic disable: undefined-global
--- ROSEY BOT v2.0 - ULTIMATE EDITION (CREATED BY ROSEY, AGE 21)
--- Load Rayfield Interface 
+
+--[[]] ROSEY BOT v2.0 - ULTIMATE EDITION (CREATED BY ROSEY, AGE 21)
+-- Load Rayfield Interface ]]--
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
     Name = "ROSEY BOT v2.0",
