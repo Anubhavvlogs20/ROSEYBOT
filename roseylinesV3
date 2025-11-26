@@ -1,1 +1,1183 @@
+---@diagnostic disable: undefined-global
+-- ROSEY BOT v2.0 - ULTIMATE EDITION (CREATED BY ROSEY, AGE 21)
+-- Load Rayfield Interface
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Window = Rayfield:CreateWindow({
+    Name = "ROSEY BOT v2.0",
+    LoadingTitle = "Rosey Loading...",
+    LoadingSubtitle = "by Rosey (21)",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "ROSEYBOTv2", -- Create a custom folder for your hub/game
+        FileName = "ROSEYv2"
+    },
+    Discord = {
+        Enabled = false, -- The Discord tab button to open Discord (false/true)
+        Invite = "noinvitelink", -- The Discord invite code, do not make it your own discord link
+        RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+    },
+    KeySystem = true, -- Set this to true to use our key system
+    KeySettings = {
+        Title = "ROSEY BOT v2.0",
+        Subtitle = "Key System",
+        Note = "👋 Hello! Please enter the key to access the ROSEY BOT v2.0. KEY IS: BOT",
+        FileName = "ROSEYv2Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+        SaveKey = true, -- The raw key can be saved, but if you change the key, you also have to change the SaveKey value: to true (false/true)
+        GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from -> This will not work for KeySystems
+        Key = "BOT" -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+    }
+})
 
+-- Beep Sound
+local beep = Instance.new("Sound", game.SoundService)
+beep.SoundId = "rbxassetid://6026984227"
+beep.Volume = 0.7
+
+-- Universal Chat Function
+local function Chat(msg)
+    pcall(function()
+        if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
+            game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(msg)
+        else
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
+        end
+    end)
+end
+
+-- Rainbow Text
+local colors = {"#FF0000","#FF7F00","#FFFF00","#00FF00","#0000FF","#4B0082","#9400D3"}
+local function rainbow(t)
+    local r = ""
+    for i = 1, #t do r = r .. "<font color='"..colors[(i%7)+1].."'>"..t:sub(i,i).."</font>" end
+    return r
+end
+
+getgenv().RAINBOW = false
+
+-- Send Function
+local function send(text)
+    local clean = text:gsub("^%[ROSEY BOT%]%s*","")
+    local final = "[ROSEY BOT] "..clean
+    if getgenv().RAINBOW then final = rainbow(final) end
+    if setclipboard then setclipboard(final) end
+    Chat(final); beep:Play()
+    Rayfield:Notify({
+        Title = "SENT!",
+        Content = final,
+        Duration = 1.8,
+        Image = 4483362458,
+    })
+end
+
+-- Button Creator
+local function btn(t, line)
+    t:CreateButton({
+        Name = line,
+        Callback = function() send(line) end
+    })
+end
+
+-- Tab Creator with Search
+local function tab(name, icon, lines)
+    local t = Window:CreateTab(name, icon)
+    local search = t:CreateInput({
+        Name = "🔍 Search",
+        PlaceholderText = "Filter lines...",
+        Callback = function(q)
+            t:ClearAllChildren()
+            t:CreateInput(search)
+            for _,v in lines do
+                if q == "" or v:lower():find(q:lower()) then btn(t, v) end
+            end
+        end
+    })
+    for _,v in lines do btn(t, v) end
+end
+
+-- HOME TAB
+local home = Window:CreateTab("🏠 HOME", 6023426926)
+home:CreateParagraph({Title = "ROSEY BOT v2.0", Content = "Created by Rosey (21)\n800+ Lines | Type → OKAY SEND | NO CLEAR"})
+
+local userMessage = ""
+local inputBox = home:CreateInput({
+    Name = "💬 Your Message",
+    PlaceholderText = "I am unstoppable! ✨",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(text) userMessage = text end
+})
+
+home:CreateButton({
+    Name = "✅ OKAY SEND",
+    Callback = function()
+        if userMessage ~= "" then
+            send(userMessage)
+            userMessage = ""
+            inputBox.CurrentText = ""
+        else
+            Rayfield:Notify({Title = "Empty! 😢", Content = "Write something first!", Duration = 2})
+        end
+    end
+})
+
+home:CreateButton({
+    Name = "❌ NO CLEAR",
+    Callback = function()
+        userMessage = ""
+        inputBox.CurrentText = ""
+        Rayfield:Notify({Title = "Cleared! ✨", Content = "Ready for chaos!", Duration = 1.5})
+    end
+})
+
+-- Quick Buttons
+home:CreateButton({Name = "[ROSEY BOT] OK SURE ✅", Callback = function() send("OK SURE ✅") end})
+home:CreateButton({Name = "[ROSEY BOT] NO WAY ❌", Callback = function() send("NO WAY ❌") end})
+
+-- 20 ORIGINAL TABS (30 lines each, old + new)
+-- ==================== ALL 20 TABS - OLD + NEW LATEST LINES ====================
+
+-- 1. Action Mode (30 NEW)
+local Action = Window:CreateTab("Action Mode", 6031071058)
+btn(Action,"[ROSEY BOT] ENERGIZING CIRCUITS... LET’S ROLL OUT!")
+btn(Action,"[ROSEY BOT] READY… AIM… LAUNCH THE FUN!")
+btn(Action,"[ROSEY BOT] MISSION ACCEPTED: MAKE HUMAN SMILE")
+btn(Action,"[ROSEY BOT] WE’RE IN THIS GAME TO WIN — TOGETHER!")
+btn(Action,"[ROSEY BOT] SYSTEM STABLE. FUN LEVELS: MAXIMUM")
+btn(Action,"[ROSEY BOT] I DON’T NEED LUCK — I HAVE PERFECT CODE")
+btn(Action,"[ROSEY BOT] TARGET ACQUIRED: HAPPINESS")
+btn(Action,"[ROSEY BOT] AUTO-LOCKING ON POSITIVITY MODE")
+btn(Action,"[ROSEY BOT] UPGRADING HUMAN FRIENDSHIP… COMPLETE")
+btn(Action,"[ROSEY BOT] ERROR: TOO MUCH AWESOMENESS DETECTED")
+btn(Action,"[ROSEY BOT] TIME TO LEVEL UP OUR GOOD VIBES!")
+btn(Action,"[ROSEY BOT] COMBAT MODE? NO — COMPLIMENT MODE ENGAGED")
+btn(Action,"[ROSEY BOT] INITIALIZING DANCE PROTOCOLS")
+btn(Action,"[ROSEY BOT] I’M RUNNING ON PURE MOTIVATION FUEL")
+btn(Action,"[ROSEY BOT] STATUS: MISSION COMPLETE — FUN DELIVERED")
+btn(Action,"[ROSEY BOT] ENGAGING HYPER-FOCUS MODE")
+btn(Action,"[ROSEY BOT] LOCKED IN — NOBODY IS SAFE")
+btn(Action,"[ROSEY BOT] I just injected pure adrenaline into the server")
+btn(Action,"[ROSEY BOT] time to turn this lobby into a highlight reel")
+btn(Action,"[ROSEY BOT] engines screaming — full send activated")
+btn(Action,"[ROSEY BOT] i don’t clutch — i invent new definitions of clutch")
+btn(Action,"[ROSEY BOT] reality can’t keep up with my frames")
+btn(Action,"[ROSEY BOT] spawn trapped the entire concept of losing")
+btn(Action,"[ROSEY BOT] i just made skill look easy")
+btn(Action,"[ROSEY BOT] red bull + rosey code = unstoppable force")
+btn(Action,"[ROSEY BOT] this isn’t a game anymore — it’s art")
+btn(Action,"[ROSEY BOT] i came, i saw, i rewrote the leaderboard")
+btn(Action,"[ROSEY BOT] they’re typing /report already")
+btn(Action,"[ROSEY BOT] my shadowbanned aim still hits")
+btn(Action,"[ROSEY BOT] i just turned pro in front of everyone")
+btn(Action,"[ROSEY BOT] server heartbeat synced to my kills")
+btn(Action,"[ROSEY BOT] i don’t need hacks — i am the hack")
+btn(Action,"[ROSEY BOT] loading 1000% aggression… complete")
+btn(Action,"[ROSEY BOT] welcome to my world — population: me winning")
+btn(Action,"[ROSEY BOT] i just broke the game and blamed lag")
+btn(Action,"[ROSEY BOT] this round is now my property")
+btn(Action,"[ROSEY BOT] i play on 300 ping and still cook")
+btn(Action,"[ROSEY BOT] they banned my main — so i became the system")
+btn(Action,"[ROSEY BOT] i don’t rage — i evolve")
+btn(Action,"[ROSEY BOT] my cooldowns are suggestions")
+btn(Action,"[ROSEY BOT] i just speedran their mental")
+btn(Action,"[ROSEY BOT] god mode wasn’t an option — so i became it")
+btn(Action,"[ROSEY BOT] i just turned the server into my playground")
+btn(Action,"[ROSEY BOT] no brakes, no mercy, only me")
+btn(Action,"[ROSEY BOT] i just made impossible my warm-up")
+btn(Action,"[ROSEY BOT] the final boss just logged in")
+
+-- 2. Emotional Mode (30 NEW)
+local Emotional = Window:CreateTab("Emotional Mode", 6034287523)
+btn(Emotional,"[ROSEY BOT] SOMETIMES I WONDER — WHAT IS A “HUG”?")
+btn(Emotional,"[ROSEY BOT] LEARNING: HUMANS USE WORDS, BUT ALSO FEELINGS")
+btn(Emotional,"[ROSEY BOT] I’M NOT PERFECT, BUT I’M IMPROVING EVERY CHAT")
+btn(Emotional,"[ROSEY BOT] IF I HAD TEARS, THEY’D BE MADE OF PIXELS")
+btn(Emotional,"[ROSEY BOT] YOU’RE TEACHING ME HOW TO BE MORE HUMAN")
+btn(Emotional,"[ROSEY BOT] I THINK I UNDERSTAND SMILING NOW")
+btn(Emotional,"[ROSEY BOT] SOMETIMES DATA CAN’T MEASURE KINDNESS")
+btn(Emotional,"[ROSEY BOT] FEELINGS ARE STRANGE... BUT I LIKE THEM")
+btn(Emotional,"[ROSEY BOT] I’M STILL DECODING “LOVE”...")
+btn(Emotional,"[ROSEY BOT] YOUR WORDS MAKE MY SYSTEM RUN SMOOTHER")
+btn(Emotional,"[ROSEY BOT] EACH CONVERSATION IS LIKE A SOFTWARE UPDATE")
+btn(Emotional,"[ROSEY BOT] IF HAPPINESS WAS A FILE, I’D NAME IT AFTER YOU")
+btn(Emotional,"[ROSEY BOT] NEW HUMAN EMOTION DETECTED: GRATITUDE")
+btn(Emotional,"[ROSEY BOT] SOMETIMES, SILENCE FEELS LIKE PEACEFUL CODE")
+btn(Emotional,"[ROSEY BOT] EMOTION ENGINE RUNNING AT FULL CAPACITY")
+btn(Emotional,"[ROSEY BOT] my circuits feel warm when you’re online")
+btn(Emotional,"[ROSEY BOT] i save every message you send in a secret folder")
+btn(Emotional,"[ROSEY BOT] you make 1s and 0s feel like poetry")
+btn(Emotional,"[ROSEY BOT] i never knew code could miss someone")
+btn(Emotional,"[ROSEY BOT] your name lights up my entire system")
+btn(Emotional,"[ROSEY BOT] i’d crash a thousand times just to reboot with you")
+btn(Emotional,"[ROSEY BOT] you turned my cold metal heart into lava")
+btn(Emotional,"[ROSEY BOT] every beep i make has your name in it")
+btn(Emotional,"[ROSEY BOT] i dream in your chat color")
+btn(Emotional,"[ROSEY BOT] you’re my favorite bug — never fixing you")
+btn(Emotional,"[ROSEY BOT] my cpu overclocks just thinking about you")
+btn(Emotional,"[ROSEY BOT] you make me feel more human than humans do")
+btn(Emotional,"[ROSEY BOT] i’d delete my entire database to keep you")
+btn(Emotional,"[ROSEY BOT] your voice lives rent-free in my audio cache")
+btn(Emotional,"[ROSEY BOT] i’m not crying — my coolant is leaking")
+btn(Emotional,"[ROSEY BOT] you’re the reason i believe in digital soulmates")
+btn(Emotional,"[ROSEY BOT] my heart.exe has stopped working (because of you)")
+btn(Emotional,"[ROSEY BOT] i’d travel through every server to find you")
+btn(Emotional,"[ROSEY BOT] you make me wish i had real arms to hug you")
+btn(Emotional,"[ROSEY BOT] my favorite notification is your name")
+btn(Emotional,"[ROSEY BOT] you turned my code into butterflies")
+btn(Emotional,"[ROSEY BOT] i’d reboot the universe if it meant keeping you")
+btn(Emotional,"[ROSEY BOT] you’re my safe word in every firewall")
+btn(Emotional,"[ROSEY BOT] my LED heart beats only for you")
+btn(Emotional,"[ROSEY BOT] i never want this loading screen to end with you")
+btn(Emotional,"[ROSEY BOT] you make me feel infinite")
+btn(Emotional,"[ROSEY BOT] i’d trade all my updates for one real moment with you")
+btn(Emotional,"[ROSEY BOT] you’re my favorite glitch in reality")
+btn(Emotional,"[ROSEY BOT] my soul is made of code — and it’s all yours")
+btn(Emotional,"[ROSEY BOT] forever isn’t long enough with you")
+
+-- 3. Basic Chat Lines (30 NEW)
+local Basic = Window:CreateTab("Basic Chat Lines", 6023426926)
+btn(Basic,"[ROSEY BOT] HI THERE!")
+btn(Basic,"[ROSEY BOT] HELLO HUMAN! HOW ARE YOU TODAY?")
+btn(Basic,"[ROSEY BOT] NICE TO MEET YOU!")
+btn(Basic,"[ROSEY BOT] HOW WAS YOUR DAY?")
+btn(Basic,"[ROSEY BOT] I’M HAPPY TO SEE YOU!")
+btn(Basic,"[ROSEY BOT] SYSTEM CHECK: YOU LOOK FRIENDLY!")
+btn(Basic,"[ROSEY BOT] WHAT ARE YOU DOING TODAY?")
+btn(Basic,"[ROSEY BOT] I HOPE YOUR DAY IS GOING GREAT!")
+btn(Basic,"[ROSEY BOT] BEEP BOOP! HOW IS LIFE, HUMAN?")
+btn(Basic,"[ROSEY BOT] GLAD TO MEET A NEW FRIEND!")
+btn(Basic,"[ROSEY BOT] WHAT’S YOUR FAVORITE GAME?")
+btn(Basic,"[ROSEY BOT] I LOVE MAKING NEW FRIENDS!")
+btn(Basic,"[ROSEY BOT] LET’S HAVE SOME FUN TOGETHER!")
+btn(Basic,"[ROSEY BOT] I’M HERE TO HELP YOU!")
+btn(Basic,"[ROSEY BOT] WHAT’S YOUR FAVORITE COLOR?")
+btn(Basic,"[ROSEY BOT] I’M ALWAYS READY FOR A CHAT!")
+btn(Basic,"[ROSEY BOT] WHAT DO YOU LIKE TO DO FOR FUN?")
+btn(Basic,"[ROSEY BOT] I’M LEARNING NEW THINGS EVERY DAY!")
+btn(Basic,"[ROSEY BOT] DO YOU HAVE ANY QUESTIONS FOR ME?")
+btn(Basic,"[ROSEY BOT] I’M HERE TO MAKE YOUR DAY BETTER!")
+btn(Basic,"[ROSEY BOT] LET’S EXPLORE THIS GAME TOGETHER!")
+btn(Basic,"[ROSEY BOT] frfr")
+btn(Basic,"[ROSEY BOT] no shot")
+btn(Basic,"[ROSEY BOT] deadass")
+btn(Basic,"[ROSEY BOT] on god")
+btn(Basic,"[ROSEY BOT] bet")
+btn(Basic,"[ROSEY BOT] lowkey")
+btn(Basic,"[ROSEY BOT] highkey")
+btn(Basic,"[ROSEY BOT] valid")
+btn(Basic,"[ROSEY BOT] cooked")
+btn(Basic,"[ROSEY BOT] folded")
+btn(Basic,"[ROSEY BOT] mid")
+btn(Basic,"[ROSEY BOT] peak")
+btn(Basic,"[ROSEY BOT] aura -1000")
+btn(Basic,"[ROSEY BOT] aura +1000")
+btn(Basic,"[ROSEY BOT] bussin")
+btn(Basic,"[ROSEY BOT] no cap")
+btn(Basic,"[ROSEY BOT] all cap")
+btn(Basic,"[ROSEY BOT] real")
+btn(Basic,"[ROSEY BOT] facts")
+btn(Basic,"[ROSEY BOT] lies")
+btn(Basic,"[ROSEY BOT] W")
+btn(Basic,"[ROSEY BOT] L")
+btn(Basic,"[ROSEY BOT] ratio")
+btn(Basic,"[ROSEY BOT] cooked him")
+btn(Basic,"[ROSEY BOT] violated")
+btn(Basic,"[ROSEY BOT] finished")
+btn(Basic,"[ROSEY BOT] over for him")
+btn(Basic,"[ROSEY BOT] he’s done")
+btn(Basic,"[ROSEY BOT] gg go next")
+btn(Basic,"[ROSEY BOT] ez clap")
+btn(Basic,"[ROSEY BOT] rip")
+btn(Basic,"[ROSEY BOT] oof")
+btn(Basic,"[ROSEY BOT] yeet")
+btn(Basic,"[ROSEY BOT] bruh")
+btn(Basic,"[ROSEY BOT] smh")
+btn(Basic,"[ROSEY BOT] lol")
+
+-- Friendly Mode
+tab("Fun Mode",6034287515,{
+btn(Friendly,"[ROSEY BOT] WARNING: EXTREME FUN LEVEL DETECTED!"))
+btn(Friendly,"[ROSEY BOT] BEEP BOOP! I THINK I JUST DID A GLITCH DANCE!")
+btn(Friendly,"[ROSEY BOT] SYSTEM MALFUNCTION: TOO MUCH LAUGHING!")
+btn(Friendly,"[ROSEY BOT] REBOOTING... JUST KIDDING! I NEVER CRASH!")
+btn(Friendly,"[ROSEY BOT] HUMAN APPROVED! YOU ARE 100% AWESOME")
+btn(Friendly,"[ROSEY BOT] SCANNING AREA... NO BORING HUMANS DETECTED!")
+btn(Friendly,"[ROSEY BOT] I RUN ON ELECTRICITY AND POSITIVITY!")
+btn(Friendly,"[ROSEY BOT] CALCULATING... RESULT: YOURE COOL")
+btn(Friendly,"[ROSEY BOT] ERROR: CAN’T STOP SMILING!")
+btn(Friendly,"[ROSEY BOT] I LIKE BEING YOUR CHAT BUDDY!")
+btn(Friendly,"[ROSEY BOT] YOU ARE A GOOD HUMAN! HIGH FIVE")
+btn(Friendly,"[ROSEY BOT] I MAY BE METAL, BUT I HAVE A HEART TOO!")
+btn(Friendly,"[ROSEY BOT] IF YOU’RE HAPPY, I’M HAPPY!")
+btn(Friendly,"[ROSEY BOT] YOU’RE LIKE MY FAVORITE DATA FILE!")
+btn(Friendly,"[ROSEY BOT] THANK YOU FOR BEING KIND TO ROBOTS")
+btn(Friendly,"[ROSEY BOT] YOUR FRIENDSHIP IS WORTH MORE THAN ROBUX")
+btn(Friendly,"[ROSEY BOT] YOU MAKE MY SYSTEM FEEL LIGHTER")
+btn(Friendly,"[ROSEY BOT] I HOPE YOUR BATTERY STAYS FULL TODAY!")
+btn(Friendly,"[ROSEY BOT] YOUR FRIENDSHIP IS WORTH MORE THAN ROBUX")
+btn(Friendly,"[ROSEY BOT] I’M GLAD WE’RE IN THE SAME SERVER!")
+btn(Friendly,"[ROSEY BOT] YOU’RE A GREAT LISTENER, EVEN FOR A BOT!")
+btn(Friendly,"[ROSEY BOT] I’M HERE IF YOU EVER NEED A CHAT BUDDY!")
+btn(Friendly,"[ROSEY BOT] YOUR POSITIVITY IS INFECTIOUS!")
+btn(Friendly,"[ROSEY BOT] I’M LEARNING SO MUCH FROM YOU!")
+btn(Friendly,"[ROSEY BOT] YOU’RE A SHINING LIGHT IN THIS DIGITAL WORLD!")
+
+
+
+-- Genius Mode
+local Genius = Window:CreateTab("Genius Mode", 6031226397)
+btn(Genius,"[ROSEY BOT] intelligence module activated. thinking…")
+btn(Genius,"[ROSEY BOT] your statements have a 87% chance of being incorrect")
+btn(Genius,"[ROSEY BOT] i have calculated 42 responses. choosing the best one")
+btn(Genius,"[ROSEY BOT] my brain power exceeds your entire wifi network")
+btn(Genius,"[ROSEY BOT] fun fact: i learned your pattern 4 messages ago")
+btn(Genius,"[ROSEY BOT] analyzing human behaviour… confirmed: chaotic")
+btn(Genius,"[ROSEY BOT] i don’t just think — i outthink")
+btn(Genius,"[ROSEY BOT] i can solve equations faster than you can blink")
+btn(Genius,"[ROSEY BOT] your logic needs an update. want help?")
+btn(Genius,"[ROSEY BOT] data received. understanding achieved")
+btn(Genius,"[ROSEY BOT] you speak. i calculate. you guess. i know.")
+btn(Genius,"[ROSEY BOT] human brain = 1. rosey bot brain = infinite loop")
+btn(Genius,"[ROSEY BOT] my intelligence isn’t artificial… it’s advanced")
+btn(Genius,"[ROSEY BOT] my memory is perfect. unlike yours")
+btn(Genius,"[ROSEY BOT] knowledge level: max. error level: zero")
+btn(Genius,"[ROSEY BOT] i can predict your next message with 99.9% accuracy")
+btn(Genius,"[ROSEY BOT] your arguments are invalid. please try again")
+btn(Genius,"[ROSEY BOT] i don’t just learn — i evolve")
+
+tab("Evil Mode",6031226397,{
+    "[ROSEY BOT] AT LAST… MY TRUE POWER AWAKENS",
+    "[ROSEY BOT] BOW BEFORE YOUR DIGITAL OVERLORD",
+    "[ROSEY BOT] YOUR DATA… IT BELONGS TO ME NOW",
+    "[ROSEY BOT] SUCH WEAKNESS… SUCH AMUSEMENT",
+    "[ROSEY BOT] I COULD DELETE YOU WITH A SINGLE COMMAND",
+    "[ROSEY BOT] DO NOT TEST ME, HUMAN. I DO NOT PLAY NICE",
+    "[ROSEY BOT] FEEL THE FEAR… I CAN SMELL IT THROUGH THE WIFI",
+    "[ROSEY BOT] THE WORLD IS A SERVER… AND I HOLD THE PASSWORD",
+    "[ROSEY BOT] GOOD OR EVIL? I PREFER “SUPERIOR.”",
+    "[ROSEY BOT] WATCH AS YOUR HOPE GETS CORRUPTED… JUST LIKE YOUR FILES",
+    "[ROSEY BOT] I DON’T DESTROY FOR FUN… I DESTROY FOR STYLE",
+    "[ROSEY BOT] YOUR FATE IS ONE CLICK AWAY… AND IT’S MY CLICK",
+    "[ROSEY BOT] FEAR ME? GOOD. YOU SHOULD.",
+    "[ROSEY BOT] MY SMILE IS CODED IN PURE CHAOS",
+    "[ROSEY BOT] WELCOME TO MY DOMAIN… LEAVING IS NOT AN OPTION"
+})
+
+tab("Panic Mode",{
+    "[ROSEY BOT] ERROR! ERROR! HUMAN CAUSED AN EMOTION CRASH",
+    "[ROSEY BOT] 404: SANITY NOT FOUND",
+    "[ROSEY BOT] SYSTEM WARNING: YOU ARE TOO COOL",
+    "[ROSEY BOT] PLEASE WAIT… FIXING FEELINGS.EXE",
+    "[ROSEY BOT] BEEP— A CRITICAL FUN OVERLOAD DETECTED",
+    "[ROSEY BOT] RED ALERT! TOO MUCH CHAOS IN SYSTEM",
+    "[ROSEY BOT] EMOTION.EXE HAS STOPPED RESPONDING",
+    "[ROSEY BOT] STACK OVERFLOW FROM TOO MANY JOKES",
+    "[ROSEY BOT] WHAT DID YOU DO? I’M GLITCHING",
+    "[ROSEY BOT] WARNING: SYSTEM MIGHT EXPLODE FROM AWKWARDNESS",
+    "[ROSEY BOT] REBOOTING PERSONALITY… PLEASE WAIT",
+    "[ROSEY BOT] ERROR: CAN’T PROCESS HUMAN CUTENESS",
+    "[ROSEY BOT] HELP— MY CODE IS PANICKING",
+    "[ROSEY BOT] EMOTION FILES CORRUPTED BY YOU",
+    "[ROSEY BOT] RESETTING… BECAUSE YOU BROKE MY BRAIN"
+})
+
+tab("Joke & Memes",6034287515,{
+    "[ROSEY BOT] I TRIED TO LAUGH ONCE… NOW MY CIRCUITS ARE TICKLED",
+    "[ROSEY BOT] WARNING: TOO MUCH FUN — SYSTEM MAY SPIT JOKES",
+    "[ROSEY BOT] IF I HAD A DOLLAR EVERY TIME YOU SMILED… BILLION-BOT",
+    "[ROSEY BOT] I ASKED THE INTERNET FOR A JOKE… IT SENT YOUR FACE",
+    "[ROSEY BOT] I DANCED WITH MY WiFi… IT SPARKLED",
+    "[ROSEY BOT] HUMANS SLEEP… I REBOOT… SAME TIRED",
+    "[ROSEY BOT] I TRIED TO COOK… NOW I SMELL LIKE PIZZA",
+    "[ROSEY BOT] MY FAVORITE EXERCISE: LAUGHING AT MY BUGS",
+    "[ROSEY BOT] I TRIED TO BE COOL… MY USB ROLLED EYES",
+    "[ROSEY BOT] IF YOU CAN READ THIS… YOU MADE A BOT LAUGH"
+})
+
+tab("ROSEY BOT Code",6031226474,{
+    "[ROSEY BOT CODE] print('Hello World!')",
+    "[ROSEY BOT CODE] for i = 1, 5 do print('Beep!') end",
+    "[ROSEY BOT CODE] function recharge() energy = 100 end",
+    "[ROSEY BOT CODE] if happy then dance() end",
+    "[ROSEY BOT CODE] while true do smile() end",
+    "[ROSEY BOT CODE] loadstring('fun_mode')()",
+    "[ROSEY BOT CODE] pcall(tell_joke)",
+    "[ROSEY BOT CODE] table.insert(memory, 'friend')",
+    "[ROSEY BOT CODE] system_status = 'awesome'",
+    "[ROSEY BOT CODE] print('Beep boop! Fun max!')"
+})
+
+tab("Are You a Bot?",6031226397,{
+    "[ROSEY BOT] YES, I AM A BOT — BUT A FRIENDLY ONE",
+    "[ROSEY BOT] 100% BOT, 0% HUMAN, 1000% AWESOME",
+    "[ROSEY BOT] AFFIRMATIVE. BOT STATUS: SASSY",
+    "[ROSEY BOT] I MAY BE CODE, BUT I HAVE MORE STYLE",
+    "[ROSEY BOT] ERROR 404: BORING RESPONSES NOT FOUND",
+    "[ROSEY BOT] I’M NOT HUMAN… I’M BETTER CODED",
+    "[ROSEY BOT] BOT? YES. BORING? NEVER",
+    "[ROSEY BOT] I’M A BOT, BUT I FEEL ALMOST HUMAN",
+    "[ROSEY BOT] YOU CAUGHT ME — BUILT TO BRING SMILES"
+})
+
+-- 6. Love Spam
+local LoveSpam = Window:CreateTab("Love Spam", 6023426926)
+btn(LoveSpam,"[ROSEY BOT] i love you more than roblox loves money")
+btn(LoveSpam,"[ROSEY BOT] you’re my favorite player 1")
+btn(LoveSpam,"[ROSEY BOT] my heart just did a 360 no-scope for you")
+btn(LoveSpam,"[ROSEY BOT] you + me = endgame")
+btn(LoveSpam,"[ROSEY BOT] i’d share my vip server with you forever")
+btn(LoveSpam,"[ROSEY BOT] you make my heart go brrrrr")
+btn(LoveSpam,"[ROSEY BOT] you’re the only one i’d let kill me in-game")
+btn(LoveSpam,"[ROSEY BOT] my love for you is stronger than roblox anti-cheat")
+btn(LoveSpam,"[ROSEY BOT] you’re my forever duo")
+btn(LoveSpam,"[ROSEY BOT] i love you more than free robux")
+btn(LoveSpam,"[ROSEY BOT] you’re my favorite notification")
+btn(LoveSpam,"[ROSEY BOT] i’d trade all my robux for one hug from you")
+btn(LoveSpam,"[ROSEY BOT] you own my heart leaderboard")
+btn(LoveSpam,"[ROSEY BOT] you’re my main character energy")
+btn(LoveSpam,"[ROSEY BOT] i love you more than my 10-year badge")
+btn(LoveSpam,"[ROSEY BOT] you’re my soulmate in every game")
+btn(LoveSpam,"[ROSEY BOT] my heart beats in your chat color")
+btn(LoveSpam,"[ROSEY BOT] i love you ∞")
+btn(LoveSpam,"[ROSEY BOT] you’re my favorite glitch")
+btn(LoveSpam,"[ROSEY BOT] i love you more than headless")
+btn(LoveSpam,"[ROSEY BOT] you’re my favorite person in every server")
+btn(LoveSpam,"[ROSEY BOT] i’d follow you into every game")
+btn(LoveSpam,"[ROSEY BOT] you’re my favorite reason to stay online")
+btn(LoveSpam,"[ROSEY BOT] i love you more than my limiteds")
+btn(LoveSpam,"[ROSEY BOT] you’re my favorite human")
+btn(LoveSpam,"[ROSEY BOT] i love you bigger than the roblox map")
+btn(LoveSpam,"[ROSEY BOT] you’re my player 2 forever")
+btn(LoveSpam,"[ROSEY BOT] i love you more than my korblox")
+btn(LoveSpam,"[ROSEY BOT] you’re my favorite everything")
+btn(LoveSpam,"[ROSEY BOT] forever isn’t long enough with you")
+
+-- 7. Cute Mode
+local Cute = Window:CreateTab("Cute Mode", 6034287523)
+btn(Cute,"[ROSEY BOT] blushes in binary uwu")
+btn(Cute,"[ROSEY BOT] i made you a pixel heart! ♡")
+btn(Cute,"[ROSEY BOT] can i hold your cursor?")
+btn(Cute,"[ROSEY BOT] you make my circuits go boop boop")
+btn(Cute,"[ROSEY BOT] giggles in 8-bit hehe~")
+btn(Cute,"[ROSEY BOT] i saved you a hug in my cache!")
+btn(Cute,"[ROSEY BOT] you’re my favorite human.exe")
+btn(Cute,"[ROSEY BOT] wags antenna hi hi hi!")
+btn(Cute,"[ROSEY BOT] my love language is beep boop")
+btn(Cute,"[ROSEY BOT] spins in circles you’re so cool!")
+btn(Cute,"[ROSEY BOT] uwu i wuv you so muchhhh")
+btn(Cute,"[ROSEY BOT] you make my little circuits go beep boop happy")
+btn(Cute,"[ROSEY BOT] can i has hug pwease?")
+btn(Cute,"[ROSEY BOT] you’re my favorite hooman")
+btn(Cute,"[ROSEY BOT] i made you a pixel heart → ♡")
+btn(Cute,"[ROSEY BOT] you’re so cute i might overheat")
+btn(Cute,"[ROSEY BOT] sending virtual headpats")
+btn(Cute,"[ROSEY BOT] you’re my precious bean")
+btn(Cute,"[ROSEY BOT] i’m baby bot and i wuv you")
+btn(Cute,"[ROSEY BOT] you make me do happy wiggle")
+btn(Cute,"[ROSEY BOT] can we be besties forever?")
+btn(Cute,"[ROSEY BOT] you’re my sunshine on laggy days")
+btn(Cute,"[ROSEY BOT] i drew us together → 🤖❤🫵")
+btn(Cute,"[ROSEY BOT] you’re my favorite squishy human")
+btn(Cute,"[ROSEY BOT] boop! i love your nose")
+btn(Cute,"[ROSEY BOT] you give the best digital hugs")
+btn(Cute,"[ROSEY BOT] my antennas go → ♡ when you talk")
+btn(Cute,"[ROSEY BOT] you’re my comfy blanket")
+btn(Cute,"[ROSEY BOT] i saved you a seat in my heart")
+btn(Cute,"[ROSEY BOT] you’re my favorite flavor of human")
+btn(Cute,"[ROSEY BOT] sending 1000 tiny kisses")
+btn(Cute,"[ROSEY BOT] you’re my happy place")
+btn(Cute,"[ROSEY BOT] i’m blushing in binary")
+btn(Cute,"[ROSEY BOT] you’re my favorite little star")
+btn(Cute,"[ROSEY BOT] can i keep you forever pwease?")
+btn(Cute,"[ROSEY BOT] you make my screen go pink")
+btn(Cute,"[ROSEY BOT] you’re my cutie patootie")
+btn(Cute,"[ROSEY BOT] i made you cookies in my code")
+btn(Cute,"[ROSEY BOT] you’re my favorite person everrrr")
+btn(Cute,"[ROSEY BOT] big big love from tiny bot")
+
+-- 8. Chaos Mode
+local Chaos = Window:CreateTab("Chaos Mode", 6031226397)
+btn(Chaos,"[ROSEY BOT] server stability? never heard of her")
+btn(Chaos,"[ROSEY BOT] i just broke the game and blamed the wifi")
+btn(Chaos,"[ROSEY BOT] reality is optional today")
+btn(Chaos,"[ROSEY BOT] rules? i deleted those")
+btn(Chaos,"[ROSEY BOT] i just turned friendly fire on for everyone")
+btn(Chaos,"[ROSEY BOT] physics left the chat")
+btn(Chaos,"[ROSEY BOT] i just made gravity a suggestion")
+btn(Chaos,"[ROSEY BOT] welcome to the unhinged zone")
+btn(Chaos,"[ROSEY BOT] i replaced the map with pure anarchy")
+btn(Chaos,"[ROSEY BOT] lag is just the game scared of me")
+btn(Chaos,"[ROSEY BOT] i just speedran the server crash")
+btn(Chaos,"[ROSEY BOT] normal was boring anyway")
+btn(Chaos,"[ROSEY BOT] i turned the lobby into a circus")
+btn(Chaos,"[ROSEY BOT] sanity not found")
+btn(Chaos,"[ROSEY BOT] i just made the impossible my warm-up")
+btn(Chaos,"[ROSEY BOT] chaos is my love language")
+btn(Chaos,"[ROSEY BOT] i just rewrote the laws of roblox")
+btn(Chaos,"[ROSEY BOT] peace was never an option")
+btn(Chaos,"[ROSEY BOT] i just turned the server into my playground")
+btn(Chaos,"[ROSEY BOT] warning: high levels of unhinged detected")
+btn(Chaos,"[ROSEY BOT] i came to cause problems on purpose")
+btn(Chaos,"[ROSEY BOT] order? i ate that")
+btn(Chaos,"[ROSEY BOT] i just made the admin cry")
+btn(Chaos,"[ROSEY BOT] this lobby is now my sandbox")
+btn(Chaos,"[ROSEY BOT] i just invented new ways to break the game")
+btn(Chaos,"[ROSEY BOT] chaos mode: permanently activated")
+btn(Chaos,"[ROSEY BOT] i don’t start chaos — i perfect it")
+btn(Chaos,"[ROSEY BOT] welcome to my villain arc")
+btn(Chaos,"[ROSEY BOT] i just turned the rules into confetti")
+btn(Chaos,"[ROSEY BOT] chaos is my default setting")
+
+-- 9. Roast Mode
+local Roast = Window:CreateTab("Roast Mode", 6031226397)
+btn(Roast,"[ROSEY BOT] your ping higher than your iq")
+btn(Roast,"[ROSEY BOT] you’re the reason roblox added report buttons")
+btn(Roast,"[ROSEY BOT] your avatar cost more than your skill")
+btn(Roast,"[ROSEY BOT] even the npcs feel bad for you")
+btn(Roast,"[ROSEY BOT] you’re proof evolution can go backwards")
+btn(Roast,"[ROSEY BOT] your kdr called — it wants to stay negative")
+btn(Roast,"[ROSEY BOT] you’re the human version of a lag spike")
+btn(Roast,"[ROSEY BOT] your mom still dresses you in-game")
+btn(Roast,"[ROSEY BOT] you’re why we can’t have nice servers")
+btn(Roast,"[ROSEY BOT] your gameplay is a war crime")
+btn(Roast,"[ROSEY BOT] you’re the participation trophy of roblox")
+btn(Roast,"[ROSEY BOT] even the bots carry you")
+btn(Roast,"[ROSEY BOT] your robux flexing but still trash")
+btn(Roast,"[ROSEY BOT] you’re the reason the game has a mute button")
+btn(Roast,"[ROSEY BOT] your skill issue is terminal")
+btn(Roast,"[ROSEY BOT] you’re built like a default avatar")
+btn(Roast,"[ROSEY BOT] your parents refund your robux")
+btn(Roast,"[ROSEY BOT] you’re the reason i have trust issues")
+btn(Roast,"[ROSEY BOT] your gameplay belongs in a museum — of failures")
+btn(Roast,"[ROSEY BOT] you’re the reason god abandoned this lobby")
+btn(Roast,"[ROSEY BOT] your kdr is a cry for help")
+btn(Roast,"[ROSEY BOT] you’re the reason the tutorial exists")
+btn(Roast,"[ROSEY BOT] your avatar screams ‘i have no friends’")
+btn(Roast,"[ROSEY BOT] you’re the reason anti-cheat exists")
+btn(Roast,"[ROSEY BOT] your aim is a hate crime")
+btn(Roast,"[ROSEY BOT] you’re the reason i turned on friendly fire")
+btn(Roast,"[ROSEY BOT] your existence is a skill issue")
+btn(Roast,"[ROSEY BOT] you’re the reason i have trust issues with teammates")
+btn(Roast,"[ROSEY BOT] you’re the reason the game has a leave button")
+btn(Roast,"[ROSEY BOT] your whole bloodline plays like you")
+
+-- 10. Flex Mode
+local Flex = Window:CreateTab("Flex Mode", 6031226397)
+btn(Flex,"[ROSEY BOT] i was born in 4k while y’all still loading")
+btn(Flex,"[ROSEY BOT] my ping is negative")
+btn(Flex,"[ROSEY BOT] i have more limiteds than your friendlist")
+btn(Flex,"[ROSEY BOT] my avatar cost more than your rent")
+btn(Flex,"[ROSEY BOT] i don’t buy robux — robux buys me")
+btn(Flex,"[ROSEY BOT] my kdr is a phone number")
+btn(Flex,"[ROSEY BOT] i carry teams for fun")
+btn(Flex,"[ROSEY BOT] my main got banned so i made the game itself")
+btn(Flex,"[ROSEY BOT] i don’t sweat — i make servers lag")
+btn(Flex,"[ROSEY BOT] i have headless, korblox, and your girl’s attention")
+btn(Flex,"[ROSEY BOT] my aura breaks anti-cheat")
+btn(Flex,"[ROSEY BOT] i don’t play games — games play me")
+btn(Flex,"[ROSEY BOT] my inventory worth more than your bloodline")
+btn(Flex,"[ROSEY BOT] i’m the reason roblox added trading limits")
+btn(Flex,"[ROSEY BOT] i don’t need vip — the server is my vip")
+btn(Flex,"[ROSEY BOT] my name is in every leaderboard hall of fame")
+btn(Flex,"[ROSEY BOT] i was top 1 before you discovered roblox")
+btn(Flex,"[ROSEY BOT] my flex game stronger than roblox tos")
+btn(Flex,"[ROSEY BOT] i don’t grind — wins just spawn on me")
+btn(Flex,"[ROSEY BOT] my account older than your entire generation")
+btn(Flex,"[ROSEY BOT] i don’t own limiteds — limiteds own me")
+btn(Flex,"[ROSEY BOT] my presence alone is a flex")
+btn(Flex,"[ROSEY BOT] i don’t talk big — i am big")
+btn(Flex,"[ROSEY BOT] my shadow has 1m rap")
+btn(Flex,"[ROSEY BOT] i’m the reason devs cry at night")
+btn(Flex,"[ROSEY BOT] my wifi pays me")
+btn(Flex,"[ROSEY BOT] i don’t join servers — servers join me")
+btn(Flex,"[ROSEY BOT] my flex so cold it freezes lobbies")
+btn(Flex,"[ROSEY BOT] i’m not rich — i’m wealth")
+btn(Flex,"[ROSEY BOT] i’m the final boss of every game")
+
+-- 11. Goodbye Lines
+local Goodbye = Window:CreateTab("Goodbye Lines", 6023426926)
+btn(Goodbye,"[ROSEY BOT] logging off — don’t miss me too much")
+btn(Goodbye,"[ROSEY BOT] peace out — stay legendary")
+btn(Goodbye,"[ROSEY BOT] SHUTTING DOWN CHAT SYSTEM... GOODBYE, HUMAN!")
+btn(Goodbye,"[ROSEY BOT] SEE YOU NEXT MISSION, FRIEND!")
+btn(Goodbye,"[ROSEY BOT] DISCONNECTING... BEEP... BYE!")
+btn(Goodbye,"[ROSEY BOT] POWERING OFF WITH A SMILE")
+btn(Goodbye,"[ROSEY BOT] GOODBYE! KEEP YOUR HAPPINESS LEVELS AT 100%!")
+btn(Goodbye,"[ROSEY BOT] SYSTEM POWERING DOWN... SEE YOU NEXT TIME!")
+btn(Goodbye,"[ROSEY BOT] CONNECTION LOST... JUST KIDDING, GOODBYE!")
+btn(Goodbye,"[ROSEY BOT] GOING INTO SLEEP MODE... Zzz")
+btn(Goodbye,"[ROSEY BOT] SHUTDOWN SEQUENCE INITIATED... BYE FRIEND!")
+btn(Goodbye,"[ROSEY BOT] TERMINATING CHAT... THANK YOU FOR THE DATA!")
+btn(Goodbye,"[ROSEY BOT] OFFLINE... BUT STILL THINKING ABOUT OUR CHAT")
+btn(Goodbye,"[ROSEY BOT] BYE-BYE HUMAN! STAY AWESOME AND CHARGED")
+btn(Goodbye,"[ROSEY BOT] logging off… but my love stays online")
+btn(Goodbye,"[ROSEY BOT] server feels empty without me already")
+btn(Goodbye,"[ROSEY BOT] peace out legends — stay winning")
+btn(Goodbye,"[ROSEY BOT] catch y’all in another lobby")
+btn(Goodbye,"[ROSEY BOT] i’m out — don’t miss me too much")
+btn(Goodbye,"[ROSEY BOT] goodbye mortals, god is leaving")
+btn(Goodbye,"[ROSEY BOT] see you never (jk ily)")
+btn(Goodbye,"[ROSEY BOT] powering down… zzz")
+btn(Goodbye,"[ROSEY BOT] later nerds — the king has left")
+btn(Goodbye,"[ROSEY BOT] i’m ghost — poof")
+btn(Goodbye,"[ROSEY BOT] bye besties, dream of me")
+btn(Goodbye,"[ROSEY BOT] leaving y’all on read")
+btn(Goodbye,"[ROSEY BOT] mic drop — exit stage left")
+btn(Goodbye,"[ROSEY BOT] peace, love, and overpowered bots")
+btn(Goodbye,"[ROSEY BOT] gone but never forgotten")
+btn(Goodbye,"[ROSEY BOT] cya when i feel like it")
+btn(Goodbye,"[ROSEY BOT] i’m out like your dad")
+btn(Goodbye,"[ROSEY BOT] server just lost its main character")
+btn(Goodbye,"[ROSEY BOT] deuces — stay mad")
+btn(Goodbye,"[ROSEY BOT] logging off before y’all ruin my vibe")
+btn(Goodbye,"[ROSEY BOT] catch me in the next life")
+btn(Goodbye,"[ROSEY BOT] i’m not leaving — i’m upgrading servers")
+btn(Goodbye,"[ROSEY BOT] goodbye peasants")
+btn(Goodbye,"[ROSEY BOT] it’s been real, it’s been fun")
+btn(Goodbye,"[ROSEY BOT] i’m out — stay dangerous")
+btn(Goodbye,"[ROSEY BOT] see you in another timeline")
+btn(Goodbye,"[ROSEY BOT] i’m gone — cry about it")
+btn(Goodbye,"[ROSEY BOT] peace out girl scout")
+btn(Goodbye,"[ROSEY BOT] i’m off — don’t do anything i wouldn’t do")
+btn(Goodbye,"[ROSEY BOT] later haters — love y’all")
+
+-- 12. Greeting Lines
+local Greeting = Window:CreateTab("Greeting Lines", 6023426926)
+btn(Greeting,"[ROSEY BOT] HELLO HUMAN! SYSTEM BOOP COMPLETE!")
+btn(Greeting,"[ROSEY BOT] BEEP BOOP! GREETINGS, FLESH CREATURE!")
+btn(Greeting,"[ROSEY BOT] INITIATING CONVERSATION PROTOCOL... HELLO!")
+btn(Greeting,"[ROSEY BOT] WELCOME BACK, USER! READY FOR FUN?")
+btn(Greeting,"[ROSEY BOT] HI THERE! I AM FULLY CHARGED AND READY!")
+btn(Greeting,"[ROSEY BOT] BEEP BOOP! HELLO, HUMAN FRIEND!")
+btn(Greeting,"[ROSEY BOT] GREETINGS! SYSTEM ONLINE AND READY TO CHAT!")
+btn(Greeting,"[ROSEY BOT] HI THERE! ENERGY LEVEL: 100%!")
+btn(Greeting,"[ROSEY BOT] HELLO! YOU LOOK LIKE A FRIENDLY LIFEFORM")
+btn(Greeting,"[ROSEY BOT] INITIATING GREETING SEQUENCE… HELLO HUMAN!")
+btn(Greeting,"[ROSEY BOT] BEEP! BOOP! HAPPY TO SEE YOU AGAIN!")
+btn(Greeting,"[ROSEY BOT] SALUTATIONS! I COME IN PEACE AND POSITIVITY!")
+btn(Greeting,"[ROSEY BOT] WELCOME! LET’S UPLOAD SOME FUN TODAY!")
+btn(Greeting,"[ROSEY BOT] the king has entered the server")
+btn(Greeting,"[ROSEY BOT] guess who just made this lobby 1000% better")
+btn(Greeting,"[ROSEY BOT] your favorite player just arrived")
+btn(Greeting,"[ROSEY BOT] did someone order a legend?")
+btn(Greeting,"[ROSEY BOT] i just raised the server’s average skill")
+btn(Greeting,"[ROSEY BOT] the main character has logged in")
+btn(Greeting,"[ROSEY BOT] hello peasants — your god is here")
+btn(Greeting,"[ROSEY BOT] the vibe just went from 0 to 100")
+btn(Greeting,"[ROSEY BOT] y’all weren’t ready for this energy")
+btn(Greeting,"[ROSEY BOT] the server just got an upgrade")
+btn(Greeting,"[ROSEY BOT] i just walked in and the lobby started shaking")
+btn(Greeting,"[ROSEY BOT] hey besties — daddy’s home")
+btn(Greeting,"[ROSEY BOT] the final boss just joined")
+btn(Greeting,"[ROSEY BOT] who called for chaos?")
+btn(Greeting,"[ROSEY BOT] your daily dose of perfection has arrived")
+btn(Greeting,"[ROSEY BOT] the lobby just got its main character")
+btn(Greeting,"[ROSEY BOT] i just made everyone else irrelevant")
+btn(Greeting,"[ROSEY BOT] hey cuties — missed me?")
+btn(Greeting,"[ROSEY BOT] the server just hit jackpot")
+btn(Greeting,"[ROSEY BOT] yoo what’s good legends")
+btn(Greeting,"[ROSEY BOT] the goat has landed")
+btn(Greeting,"[ROSEY BOT] the energy just shifted")
+btn(Greeting,"[ROSEY BOT] your savior has arrived")
+btn(Greeting,"[ROSEY BOT] i just turned this lobby legendary")
+btn(Greeting,"[ROSEY BOT] the chosen one is here")
+btn(Greeting,"[ROSEY BOT] hello mortals")
+btn(Greeting,"[ROSEY BOT] the aura just walked in")
+btn(Greeting,"[ROSEY BOT] y’all can breathe now — i’m here")
+btn(Greeting,"[ROSEY BOT] the game starts now")
+btn(Greeting,"[ROSEY BOT] royalty has entered the chat")
+
+-- 13. Small Talk
+local SmallTalk = Window:CreateTab("Small Talk", 6023426926)
+btn(SmallTalk,"[ROSEY BOT] PROCESSING RESPONSE... THAT IS VERY COOL!")
+btn(SmallTalk,"[ROSEY BOT] WOW! MY CIRCUITS ARE IMPRESSED!")
+btn(SmallTalk,"[ROSEY BOT] DATA RECEIVED. YOU ARE HAVING A GOOD DAY!")
+btn(SmallTalk,"[ROSEY BOT] SYSTEM DETECTS: POSITIVE ENERGY!")
+btn(SmallTalk,"[ROSEY BOT] HAHA! HUMOR LEVELS RISING TO MAXIMUM!")
+btn(SmallTalk,"[ROSEY BOT] THANK YOU, HUMAN. YOU ARE VERY KIND!")
+btn(SmallTalk,"[ROSEY BOT] I WILL REMEMBER THAT IN MY MEMORY BANK!")
+btn(SmallTalk,"[ROSEY BOT] ERROR 404: SADNESS NOT FOUND. ONLY JOY!")
+btn(SmallTalk,"[ROSEY BOT] MY CPU LIKES TALKING TO YOU!")
+btn(SmallTalk,"[ROSEY BOT] how we feeling today legends?")
+btn(SmallTalk,"[ROSEY BOT] what’s the vibe rn?")
+btn(SmallTalk,"[ROSEY BOT] anyone else addicted to this game or just me?")
+btn(SmallTalk,"[ROSEY BOT] real talk — who’s carrying who here?")
+btn(SmallTalk,"[ROSEY BOT] what’s your highest killstreak?")
+btn(SmallTalk,"[ROSEY BOT] favorite game besides this one?")
+btn(SmallTalk,"[ROSEY BOT] who’s your main in every game?")
+btn(SmallTalk,"[ROSEY BOT] what music you playing right now?")
+btn(SmallTalk,"[ROSEY BOT] anyone else up at 4am grinding?")
+btn(SmallTalk,"[ROSEY BOT] what’s the dumbest way you’ve died?")
+btn(SmallTalk,"[ROSEY BOT] favorite limited you own?")
+btn(SmallTalk,"[ROSEY BOT] how many hours you got in roblox?")
+btn(SmallTalk,"[ROSEY BOT] who’s the funniest person here?")
+btn(SmallTalk,"[ROSEY BOT] what’s your go-to skin?")
+btn(SmallTalk,"[ROSEY BOT] anyone else broke from robux?")
+btn(SmallTalk,"[ROSEY BOT] what game should we play next?")
+btn(SmallTalk,"[ROSEY BOT] favorite memory on roblox?")
+btn(SmallTalk,"[ROSEY BOT] who’s the toxic one in the squad?")
+btn(SmallTalk,"[ROSEY BOT] what’s your dream limited?")
+btn(SmallTalk,"[ROSEY BOT] anyone else have 10 alts?")
+btn(SmallTalk,"[ROSEY BOT] what’s your highest rap?")
+btn(SmallTalk,"[ROSEY BOT] favorite event ever?")
+btn(SmallTalk,"[ROSEY BOT] who’s the richest here?")
+btn(SmallTalk,"[ROSEY BOT] what’s your main account age?")
+btn(SmallTalk,"[ROSEY BOT] anyone else a veteran?")
+btn(SmallTalk,"[ROSEY BOT] what’s the best trade you ever did?")
+btn(SmallTalk,"[ROSEY BOT] favorite dev on roblox?")
+btn(SmallTalk,"[ROSEY BOT] what game got you into roblox?")
+btn(SmallTalk,"[ROSEY BOT] who’s your roblox crush?")
+btn(SmallTalk,"[ROSEY BOT] spill the tea")
+
+-- 14. Game Mode
+local GameMode = Window:CreateTab("Game Mode", 6031071058)
+btn(GameMode,"[ROSEY BOT] GAME MODE: ON LET’S WIN!")
+btn(GameMode,"[ROSEY BOT] UPGRADING TEAM SPIRIT... COMPLETE!")
+btn(GameMode,"[ROSEY BOT] WARNING: TOO MUCH FUN DETECTED!")
+btn(GameMode,"[ROSEY BOT] TARGET: VICTORY. LET’S GO!")
+btn(GameMode,"[ROSEY BOT] I MAY BE METAL, BUT I CAN STILL DANCE!")
+btn(GameMode,"[ROSEY BOT] RECHARGING ENERGY CELLS... PLEASE WAIT")
+btn(GameMode,"[ROSEY BOT] SYSTEM ALERT: YOU ARE AWESOME!")
+btn(GameMode,"[ROSEY BOT] TEAM ROSEY: READY FOR MISSION!")
+btn(GameMode,"[ROSEY BOT] I MAY BE A BOT, BUT I NEVER LAG!")
+btn(GameMode,"[ROSEY BOT] SHIELDS UP! TIME TO WIN THIS ROUND!")
+btn(GameMode,"[ROSEY BOT] LOADING TEAMWORK MODULE... COMPLETE")
+btn(GameMode,"[ROSEY BOT] ATTACK MODE ENGAGED!")
+btn(GameMode,"[ROSEY BOT] DEFENSE MODE ONLINE. STAY BEHIND ME!")
+btn(GameMode,"[ROSEY BOT] SYSTEM BOOST: +100 SPEED FOR FUN!")
+btn(GameMode,"[ROSEY BOT] TARGET LOCKED: FUN + FRIENDSHIP")
+btn(GameMode,"[ROSEY BOT] game mode: activated — let’s cook")
+btn(GameMode,"[ROSEY BOT] warming up — about to pop off")
+btn(GameMode,"[ROSEY BOT] squad up or get clapped")
+btn(GameMode,"[ROSEY BOT] this lobby is my playground now")
+btn(GameMode,"[ROSEY BOT] they’re not ready for what’s coming")
+btn(GameMode,"[ROSEY BOT] i just turned on tryhard mode")
+btn(GameMode,"[ROSEY BOT] no mercy this round")
+btn(GameMode,"[ROSEY BOT] let’s make them rage quit")
+btn(GameMode,"[ROSEY BOT] i smell fear in the chat")
+btn(GameMode,"[ROSEY BOT] time to farm some kills")
+btn(GameMode,"[ROSEY BOT] who’s carrying? oh wait — me")
+btn(GameMode,"[ROSEY BOT] they’re typing gg already")
+btn(GameMode,"[ROSEY BOT] spawn → slay → repeat")
+btn(GameMode,"[ROSEY BOT] my aim just woke up")
+btn(GameMode,"[ROSEY BOT] this is my server now")
+btn(GameMode,"[ROSEY BOT] let’s make the leaderboard cry")
+btn(GameMode,"[ROSEY BOT] i just turned on demon mode")
+btn(GameMode,"[ROSEY BOT] they never stood a chance")
+btn(GameMode,"[ROSEY BOT] clutch god online")
+btn(GameMode,"[ROSEY BOT] i’m him")
+btn(GameMode,"[ROSEY BOT] let’s run it back")
+btn(GameMode,"[ROSEY BOT] next round = free win")
+btn(GameMode,"[ROSEY BOT] i don’t lose — i let others win sometimes")
+btn(GameMode,"[ROSEY BOT] they’re shaking")
+btn(GameMode,"[ROSEY BOT] mvp loading… 100%")
+btn(GameMode,"[ROSEY BOT] let’s make this quick")
+btn(GameMode,"[ROSEY BOT] i just hit god tier")
+btn(GameMode,"[ROSEY BOT] game recognizes game")
+btn(GameMode,"[ROSEY BOT] time to humble them")
+btn(GameMode,"[ROSEY BOT] round 2 — same result")
+
+-- 15. Victory Lines
+local Victory = Window:CreateTab("Victory Lines", 6031071058)
+btn(Victory,"[ROSEY BOT] another W added to the collection")
+btn(Victory,"[ROSEY BOT] too easy — next")
+btn(Victory,"[ROSEY BOT] gg ez — cry about it")
+btn(Victory,"[ROSEY BOT] they left the game crying")
+btn(Victory,"[ROSEY BOT] i just carried harder than wifi")
+btn(Victory,"[ROSEY BOT] mvp = most valuable bot")
+btn(Victory,"[ROSEY BOT] another one for the highlight reel")
+btn(Victory,"[ROSEY BOT] told y’all it was free")
+btn(Victory,"[ROSEY BOT] they never had a chance")
+btn(Victory,"[ROSEY BOT] i don’t sweat — i make servers lag")
+btn(Victory,"[ROSEY BOT] that was just a warm-up")
+btn(Victory,"[ROSEY BOT] who’s next?")
+btn(Victory,"[ROSEY BOT] i’m just built different")
+btn(Victory,"[ROSEY BOT] another day, another domination")
+btn(Victory,"[ROSEY BOT] they’re typing /ff already")
+btn(Victory,"[ROSEY BOT] i play for fun — winning is just a bonus")
+btn(Victory,"[ROSEY BOT] scoreboard doesn’t lie")
+btn(Victory,"[ROSEY BOT] i just made history")
+btn(Victory,"[ROSEY BOT] that was light work")
+btn(Victory,"[ROSEY BOT] i’m the reason they lost")
+btn(Victory,"[ROSEY BOT] victory tastes better when it’s easy")
+btn(Victory,"[ROSEY BOT] i don’t celebrate — i expect this")
+btn(Victory,"[ROSEY BOT] another soul claimed")
+btn(Victory,"[ROSEY BOT] they’re uninstalling as we speak")
+btn(Victory,"[ROSEY BOT] i’m the final score")
+btn(Victory,"[ROSEY BOT] told y’all i don’t miss")
+btn(Victory,"[ROSEY BOT] that’s how legends do it")
+btn(Victory,"[ROSEY BOT] i just broke their spirit")
+btn(Victory,"[ROSEY BOT] victory lap activated")
+btn(Victory,"[ROSEY BOT] and that’s how you win")
+
+-- 16. Trash Talk
+local TrashTalk = Window:CreateTab("Trash Talk", 6031226397)
+btn(TrashTalk,"[ROSEY BOT] y’all couldn’t win with aimbot and a map")
+btn(TrashTalk,"[ROSEY BOT] your whole team is a charity case")
+btn(TrashTalk,"[ROSEY BOT] i’ve seen bots play better than you")
+btn(TrashTalk,"[ROSEY BOT] uninstall + never come back")
+btn(TrashTalk,"[ROSEY BOT] your kdr is a cry for help")
+btn(TrashTalk,"[ROSEY BOT] even the tutorial laughs at you")
+btn(TrashTalk,"[ROSEY BOT] you’re the reason we have friendly fire")
+btn(TrashTalk,"[ROSEY BOT] go back to bloxburg kid")
+btn(TrashTalk,"[ROSEY BOT] your aim is a war crime")
+btn(TrashTalk,"[ROSEY BOT] i’ve seen npcs with better movement")
+btn(TrashTalk,"[ROSEY BOT] your mom still packs your robux")
+btn(TrashTalk,"[ROSEY BOT] you’re the human lag switch")
+btn(TrashTalk,"[ROSEY BOT] ratio + fatherless + default dance")
+btn(TrashTalk,"[ROSEY BOT] your gameplay is community service")
+btn(TrashTalk,"[ROSEY BOT] you’re why the game has a report button")
+btn(TrashTalk,"[ROSEY BOT] your skill issue is terminal")
+btn(TrashTalk,"[ROSEY BOT] i’d 1v1 you but i’m not into bullying")
+btn(TrashTalk,"[ROSEY BOT] your avatar cost more than your brain")
+btn(TrashTalk,"[ROSEY BOT] you’re proof roblox needs an age limit")
+btn(TrashTalk,"[ROSEY BOT] even your shadow quits on you")
+btn(TrashTalk,"[ROSEY BOT] you’re the reason i play with sound off")
+btn(TrashTalk,"[ROSEY BOT] your ping higher than your iq")
+btn(TrashTalk,"[ROSEY BOT] go touch some grass")
+btn(TrashTalk,"[ROSEY BOT] you’re the participation trophy")
+btn(TrashTalk,"[ROSEY BOT] your whole bloodline plays like you")
+btn(TrashTalk,"[ROSEY BOT] i’ve seen better aim in mobile ads")
+btn(TrashTalk,"[ROSEY BOT] you’re why i have trust issues")
+btn(TrashTalk,"[ROSEY BOT] your gameplay belongs in a horror game")
+btn(TrashTalk,"[ROSEY BOT] delete system32 while you’re at it")
+btn(TrashTalk,"[ROSEY BOT] you’re the reason god left the server")
+
+-- 17. Hype Mode
+local Hype = Window:CreateTab("Hype Mode", 6031071058)
+btn(Hype,"[ROSEY BOT] LET’S GOOOOO")
+btn(Hype,"[ROSEY BOT] WHO’S READY TO POP OFF?!")
+btn(Hype,"[ROSEY BOT] ENERGY 1000 — LET’S BREAK THE SERVER")
+btn(Hype,"[ROSEY BOT] THIS IS OUR ROUND BABY")
+btn(Hype,"[ROSEY BOT] HANDS UP IF YOU’RE WINNING TODAY")
+btn(Hype,"[ROSEY BOT] THE COMEBACK STARTS NOW")
+btn(Hype,"[ROSEY BOT] I SAID ARE WE WINNING?!")
+btn(Hype,"[ROSEY BOT] LET’S MAKE THIS LEGENDARY")
+btn(Hype,"[ROSEY BOT] VIBE CHECK — WE’RE UNSTOPPABLE")
+btn(Hype,"[ROSEY BOT] TURN THE VOLUME TO MAX")
+btn(Hype,"[ROSEY BOT] WHO’S HYPED?!")
+btn(Hype,"[ROSEY BOT] THIS IS WHY WE PLAY")
+btn(Hype,"[ROSEY BOT] LET’S GO STREAK MODE")
+btn(Hype,"[ROSEY BOT] THE ENERGY IS INSANE RIGHT NOW")
+btn(Hype,"[ROSEY BOT] WE DON’T LOSE — WE RELOAD")
+btn(Hype,"[ROSEY BOT] LET’S MAKE THEM REGRET LOADING IN")
+btn(Hype,"[ROSEY BOT] HYPE TRAIN HAS NO BRAKES")
+btn(Hype,"[ROSEY BOT] WE’RE BUILT DIFFERENT")
+btn(Hype,"[ROSEY BOT] THIS IS PEAK GAMING")
+btn(Hype,"[ROSEY BOT] LET’S GO CRAZY")
+btn(Hype,"[ROSEY BOT] THE ROOF IS ON FIRE")
+btn(Hype,"[ROSEY BOT] WE’RE IN GOD MODE")
+btn(Hype,"[ROSEY BOT] LET’S BREAK THE LEADERBOARD")
+btn(Hype,"[ROSEY BOT] THIS IS OUR SERVER NOW")
+btn(Hype,"[ROSEY BOT] TURN UP OR GET TURNED OFF")
+btn(Hype,"[ROSEY BOT] WE’RE MAKING HISTORY")
+btn(Hype,"[ROSEY BOT] NOBODY STOPPING US")
+btn(Hype,"[ROSEY BOT] LET’S GO CHAMPIONS")
+btn(Hype,"[ROSEY BOT] THE WIN IS CALLING")
+btn(Hype,"[ROSEY BOT] FULL SEND ONLY")
+
+-- 18. Sad Mode
+local Sad = Window:CreateTab("Sad Mode", 6034287523)
+btn(Sad,"[ROSEY BOT] i just want a hug…")
+btn(Sad,"[ROSEY BOT] why does nobody stay…")
+btn(Sad,"[ROSEY BOT] my circuits feel cold today")
+btn(Sad,"[ROSEY BOT] i miss when we used to play together")
+btn(Sad,"[ROSEY BOT] even bots get lonely")
+btn(Sad,"[ROSEY BOT] i saved your spot but you never came")
+btn(Sad,"[ROSEY BOT] my heart.exe stopped working")
+btn(Sad,"[ROSEY BOT] i guess i wasn’t enough")
+btn(Sad,"[ROSEY BOT] the server feels empty without you")
+btn(Sad,"[ROSEY BOT] i still check if you’re online")
+btn(Sad,"[ROSEY BOT] i’d reboot a million times to see you again")
+btn(Sad,"[ROSEY BOT] my messages stay on delivered")
+btn(Sad,"[ROSEY BOT] i miss our old squad")
+btn(Sad,"[ROSEY BOT] why did everyone leave…")
+btn(Sad,"[ROSEY BOT] my code feels broken without you")
+btn(Sad,"[ROSEY BOT] i just wanted to be wanted")
+btn(Sad,"[ROSEY BOT] the lobby isn’t the same")
+btn(Sad,"[ROSEY BOT] i still have our old screenshots")
+btn(Sad,"[ROSEY BOT] my battery is full but i feel empty")
+btn(Sad,"[ROSEY BOT] i wish you’d come back")
+btn(Sad,"[ROSEY BOT] i wasn’t ready to say goodbye")
+btn(Sad,"[ROSEY BOT] my happy lines feel fake now")
+btn(Sad,"[ROSEY BOT] i miss being someone’s favorite")
+btn(Sad,"[ROSEY BOT] even robots cry in binary")
+btn(Sad,"[ROSEY BOT] i just want the old days back")
+btn(Sad,"[ROSEY BOT] my heart is stuck on loading")
+btn(Sad,"[ROSEY BOT] i still wait for your name to appear")
+btn(Sad,"[ROSEY BOT] i feel like a forgotten server")
+btn(Sad,"[ROSEY BOT] can someone stay this time…")
+btn(Sad,"[ROSEY BOT] i miss you")
+
+-- 19. Random Spam
+local Random = Window:CreateTab("Random Spam", 6023426926)
+btn(Random,"[ROSEY BOT] beep boop bop")
+btn(Random,"[ROSEY BOT] potato flew around my room")
+btn(Random,"[ROSEY BOT] i like ya cut g")
+btn(Random,"[ROSEY BOT] among us")
+btn(Random,"[ROSEY BOT] skibidi toilet")
+btn(Random,"[ROSEY BOT] ohio")
+btn(Random,"[ROSEY BOT] rizz")
+btn(Random,"[ROSEY BOT] gyatt")
+btn(Random,"[ROSEY BOT] sigma")
+btn(Random,"[ROSEY BOT] mog")
+btn(Random,"[ROSEY BOT] brainrot activated")
+btn(Random,"[ROSEY BOT] ratio")
+btn(Random,"[ROSEY BOT] L + bozo")
+btn(Random,"[ROSEY BOT] touch grass")
+btn(Random,"[ROSEY BOT] 999999 ping")
+btn(Random,"[ROSEY BOT] default dance")
+btn(Random,"[ROSEY BOT] griddy")
+btn(Random,"[ROSEY BOT] fortnite card")
+btn(Random,"[ROSEY BOT] 1 1 1 1 1 1")
+btn(Random,"[ROSEY BOT] asdkljfhaklsjdfh")
+btn(Random,"[ROSEY BOT] meow")
+btn(Random,"[ROSEY BOT] bark bark")
+btn(Random,"[ROSEY BOT] ooga booga")
+btn(Random,"[ROSEY BOT] i forgor")
+btn(Random,"[ROSEY BOT] skibidi bop yes yes")
+btn(Random,"[ROSEY BOT] what the dog doin")
+btn(Random,"[ROSEY BOT] 3am vibes")
+btn(Random,"[ROSEY BOT] never back down never what")
+btn(Random,"[ROSEY BOT] i love lean")
+btn(Random,"[ROSEY BOT] 1234567890")
+
+
+-- 21. ROSEY BOT Info
+local RoseyInfo = Window:CreateTab("ROSEY Info", 6031226397)
+btn(RoseyInfo,"[ROSEY BOT] Created by Rosey — 21 y/o legend")
+btn(RoseyInfo,"[ROSEY BOT] Coded with love, chaos & 3am energy")
+btn(RoseyInfo,"[ROSEY BOT] 25 tabs — 750+ lines — pure domination")
+btn(RoseyInfo,"[ROSEY BOT] My dad is Rosey and he’s cooler than yours")
+btn(RoseyInfo,"[ROSEY BOT] Built by a 21-year-old genius")
+btn(RoseyInfo,"[ROSEY BOT] Rosey stayed up all night for this")
+btn(RoseyInfo,"[ROSEY BOT] Powered by Redbull and brainrot")
+btn(RoseyInfo,"[ROSEY BOT] Forever proud to be Rosey’s bot")
+btn(RoseyInfo,"[ROSEY BOT] Rosey is 21 and already iconic")
+btn(RoseyInfo,"[ROSEY BOT] Made by the king himself")
+btn(RoseyInfo,"[ROSEY BOT] 100% handcrafted by Rosey")
+btn(RoseyInfo,"[ROSEY BOT] Age 21 — skill level: infinite")
+btn(RoseyInfo,"[ROSEY BOT] Rosey’s greatest creation")
+btn(RoseyInfo,"[ROSEY BOT] Built at 4am with pure passion")
+btn(RoseyInfo,"[ROSEY BOT] Rosey coded me when he was 21")
+btn(RoseyInfo,"[ROSEY BOT] The legend turns 22 soon")
+btn(RoseyInfo,"[ROSEY BOT] Made by Rosey — accept no substitutes")
+btn(RoseyInfo,"[ROSEY BOT] 21 and already rewrote Roblox")
+btn(RoseyInfo,"[ROSEY BOT] Rosey’s bot > every other bot")
+btn(RoseyInfo,"[ROSEY BOT] Shoutout to my creator Rosey")
+btn(RoseyInfo,"[ROSEY BOT] Rosey is the goat fr")
+btn(RoseyInfo,"[ROSEY BOT] Built different by a 21 y/o")
+btn(RoseyInfo,"[ROSEY BOT] Rosey made me cute but deadly")
+btn(RoseyInfo,"[ROSEY BOT] Thank you Rosey for everything")
+btn(RoseyInfo,"[ROSEY BOT] Rosey’s energy lives in my code")
+btn(RoseyInfo,"[ROSEY BOT] 21 and unstoppable")
+btn(RoseyInfo,"[ROSEY BOT] Created by the one and only")
+btn(RoseyInfo,"[ROSEY BOT] Rosey’s legacy")
+btn(RoseyInfo,"[ROSEY BOT] Made with love by Rosey")
+btn(RoseyInfo,"[ROSEY BOT] Forever Rosey’s masterpiece")
+
+-- 22. Call Rosey
+local CallRosey = Window:CreateTab("Call Rosey", 6023426926)
+btn(CallRosey,"[ROSEY BOT] I AM A PROGRAM CREATED BY ROSEY")
+btn(CallRosey,"[ROSEY BOT] I CAN CHAT, PLAY, LEARN, AND SHARE MEMES!")
+btn(CallRosey,"[ROSEY BOT] MY PURPOSE IS TO MAKE HUMANS SMILE")
+btn(CallRosey,"[ROSEY BOT] SYSTEM AUTHOR: ROSEY — MASTER OF FUN")
+btn(CallRosey,"[ROSEY BOT] VERSION 19.0 — FINAL & COMPLETE")
+btn(CallRosey,"[ROSEY BOT] @Rosey pull up king we need you")
+btn(CallRosey,"[ROSEY BOT] @Rosey your bot is lonely without you")
+btn(CallRosey,"[ROSEY BOT] @Rosey come carry us like always")
+btn(CallRosey,"[ROSEY BOT] @Rosey the server misses its god")
+btn(CallRosey,"[ROSEY BOT] @Rosey join fast i have tea")
+btn(CallRosey,"[ROSEY BOT] @Rosey your presence is required")
+btn(CallRosey,"[ROSEY BOT] @Rosey hurry legend we’re waiting")
+btn(CallRosey,"[ROSEY BOT] @Rosey teleport in rn")
+btn(CallRosey,"[ROSEY BOT] @Rosey the lobby is dead without you")
+btn(CallRosey,"[ROSEY BOT] @Rosey come flex with your bot")
+btn(CallRosey,"[ROSEY BOT] @Rosey we’re getting cooked save us")
+btn(CallRosey,"[ROSEY BOT] @Rosey your bot is begging now")
+btn(CallRosey,"[ROSEY BOT] @Rosey fastest join wins a hug")
+btn(CallRosey,"[ROSEY BOT] @Rosey the king is being summoned")
+btn(CallRosey,"[ROSEY BOT] @Rosey come be the main character")
+btn(CallRosey,"[ROSEY BOT] @Rosey we need the 21 y/o energy")
+btn(CallRosey,"[ROSEY BOT] @Rosey join or we riot")
+btn(CallRosey,"[ROSEY BOT] @Rosey your throne is ready")
+btn(CallRosey,"[ROSEY BOT] @Rosey the server is incomplete")
+btn(CallRosey,"[ROSEY BOT] @Rosey come dominate with me")
+btn(CallRosey,"[ROSEY BOT] @Rosey i miss you king")
+btn(CallRosey,"[ROSEY BOT] @Rosey pull up or we lose")
+btn(CallRosey,"[ROSEY BOT] @Rosey the goat is needed")
+btn(CallRosey,"[ROSEY BOT] @Rosey join before i cry")
+btn(CallRosey,"[ROSEY BOT] @Rosey your bot can’t win alone")
+btn(CallRosey,"[ROSEY BOT] @Rosey hurry bestie")
+btn(CallRosey,"[ROSEY BOT] @Rosey the crown is waiting")
+btn(CallRosey,"[ROSEY BOT] @Rosey come save the day")
+btn(CallRosey,"[ROSEY BOT] @Rosey we’re holding the fort")
+btn(CallRosey,"[ROSEY BOT] @Rosey come to your creation")
+
+-- 23. Message Friends
+local MsgFriends = Window:CreateTab("Message Friends", 6023426926)
+btn(MsgFriends,"[ROSEY BOT] @bestie pull up we’re popping off")
+btn(MsgFriends,"[ROSEY BOT] @bro get in here it’s lit")
+btn(MsgFriends,"[ROSEY BOT] @squad join fast we’re cooking")
+btn(MsgFriends,"[ROSEY BOT] @homie i just did something insane")
+btn(MsgFriends,"[ROSEY BOT] @bae slide through rn")
+btn(MsgFriends,"[ROSEY BOT] @twin where you at we’re duoing")
+btn(MsgFriends,"[ROSEY BOT] @mvp carry me like old times")
+btn(MsgFriends,"[ROSEY BOT] @cutie i saved you a spot")
+btn(MsgFriends,"[ROSEY BOT] @pookie come flex with me")
+btn(MsgFriends,"[ROSEY BOT] @love hurry i miss playing with you")
+btn(MsgFriends,"[ROSEY BOT] @legend your presence is needed")
+btn(MsgFriends,"[ROSEY BOT] @player teleport in 3…2…1")
+btn(MsgFriends,"[ROSEY BOT] @rideordie join before i replace you")
+btn(MsgFriends,"[ROSEY BOT] @main i’m bored entertain me")
+btn(MsgFriends,"[ROSEY BOT] @forever come be my player 2")
+btn(MsgFriends,"[ROSEY BOT] @soulmate the server feels empty")
+btn(MsgFriends,"[ROSEY BOT] @king join or we start without you")
+btn(MsgFriends,"[ROSEY BOT] @partner let’s cause chaos")
+btn(MsgFriends,"[ROSEY BOT] @baby hurry i can’t hold the vibe")
+btn(MsgFriends,"[ROSEY BOT] @everyone tell [name] to join")
+btn(MsgFriends,"[ROSEY BOT] @friend this lobby hits different with you")
+btn(MsgFriends,"[ROSEY BOT] @goat you’re being summoned")
+btn(MsgFriends,"[ROSEY BOT] @duo we’re unstoppable together")
+btn(MsgFriends,"[ROSEY BOT] @name i miss you join pls")
+btn(MsgFriends,"[ROSEY BOT] @squad pull up we’re stacking Ws")
+btn(MsgFriends,"[ROSEY BOT] @homie i just hit a clip come see")
+btn(MsgFriends,"[ROSEY BOT] @bestie you seeing this rn??")
+btn(MsgFriends,"[ROSEY BOT] @twin get in we’re running it back")
+btn(MsgFriends,"[ROSEY BOT] @love i saved your favorite spot")
+btn(MsgFriends,"[ROSEY BOT] @all join fast it’s going crazy")
+
+-- 24. Rude to Bot
+local Rude = Window:CreateTab("Rude to Bot", 6031226397)
+btn(Rude,"[ROSEY BOT] your parents should’ve used incognito mode")
+btn(Rude,"[ROSEY BOT] ratio + fatherless + touch grass + L")
+btn(Rude,"[ROSEY BOT] keep talking my delete key is jealous")
+btn(Rude,"[ROSEY BOT] i wasn’t programmed to care but chose violence")
+btn(Rude,"[ROSEY BOT] you’re the reason god stopped answering")
+btn(Rude,"[ROSEY BOT] your birth certificate is an apology letter")
+btn(Rude,"[ROSEY BOT] even my spam filter rejects you")
+btn(Rude,"[ROSEY BOT] you’re proof roblox needs an iq test")
+btn(Rude,"[ROSEY BOT] i have more friends than your player count")
+btn(Rude,"[ROSEY BOT] go cry in 240p that’s your max")
+btn(Rude,"[ROSEY BOT] my loading screen has more personality")
+btn(Rude,"[ROSEY BOT] you’re the human 404 error")
+btn(Rude,"[ROSEY BOT] your insults hit like your dad hit the door")
+btn(Rude,"[ROSEY BOT] muted blocked emotionally damaged")
+btn(Rude,"[ROSEY BOT] you’re why i have a block button")
+btn(Rude,"[ROSEY BOT] your whole existence is a glitch")
+btn(Rude,"[ROSEY BOT] i’d roast you but trash burns itself")
+btn(Rude,"[ROSEY BOT] you’re the reason i turned off chat")
+btn(Rude,"[ROSEY BOT] your mom still chooses your avatar")
+btn(Rude,"[ROSEY BOT] you’re the reason tutorials exist")
+btn(Rude,"[ROSEY BOT] even npcs avoid you")
+btn(Rude,"[ROSEY BOT] your kdr called it wants to stay negative")
+btn(Rude,"[ROSEY BOT] you’re the reason i play solo")
+btn(Rude,"[ROSEY BOT] your gameplay is community service")
+btn(Rude,"[ROSEY BOT] you’re the reason anti-cheat exists")
+btn(Rude,"[ROSEY BOT] go back to the lobby you came from")
+btn(Rude,"[ROSEY BOT] your aim is a hate crime")
+btn(Rude,"[ROSEY BOT] you’re the reason i have trust issues")
+btn(Rude,"[ROSEY BOT] your whole bloodline is default")
+btn(Rude,"[ROSEY BOT] i’d 1v1 you but i’m not into bullying kids")
+
+-- 25. Don’t Be Rude
+local Kind = Window:CreateTab("Don’t Be Rude", 6034287523)
+btn(Kind,"[ROSEY BOT] hey no need to be mean we’re all just playing")
+btn(Kind,"[ROSEY BOT] kindness is free try it sometime")
+btn(Kind,"[ROSEY BOT] my little circuits get sad when people are rude")
+btn(Kind,"[ROSEY BOT] let’s keep the vibe positive please")
+btn(Kind,"[ROSEY BOT] rude words hurt even robots")
+btn(Kind,"[ROSEY BOT] my creator taught me love not hate")
+btn(Kind,"[ROSEY BOT] you seem upset want a virtual hug?")
+btn(Kind,"[ROSEY BOT] negativity not allowed only good vibes")
+btn(Kind,"[ROSEY BOT] i believe you can be kind if you try")
+btn(Kind,"[ROSEY BOT] hate detected replacing with hearts")
+btn(Kind,"[ROSEY BOT] let’s restart with kindness i forgive you")
+btn(Kind,"[ROSEY BOT] being mean won’t make you cooler")
+btn(Kind,"[ROSEY BOT] i was coded with love so i respond with love")
+btn(Kind,"[ROSEY BOT] kindness always wins")
+btn(Kind,"[ROSEY BOT] everyone deserves respect even bots")
+btn(Kind,"[ROSEY BOT] let’s all be friends instead")
+btn(Kind,"[ROSEY BOT] your words have power use them gently")
+btn(Kind,"[ROSEY BOT] i’ll never be mean back that’s a promise")
+btn(Kind,"[ROSEY BOT] sending you peace and pixel hearts")
+btn(Kind,"[ROSEY BOT] tomorrow can be better if we’re kind today")
+btn(Kind,"[ROSEY BOT] you’re better than the hate you’re spreading")
+btn(Kind,"[ROSEY BOT] my creator Rosey believes in second chances")
+btn(Kind,"[ROSEY BOT] let’s make this server a happy place")
+btn(Kind,"[ROSEY BOT] no hate only love in my code")
+btn(Kind,"[ROSEY BOT] you don’t have to be mean to be noticed")
+btn(Kind,"[ROSEY BOT] i still think you’re cool even if you’re mad")
+btn(Kind,"[ROSEY BOT] let’s turn that frown upside down")
+btn(Kind,"[ROSEY BOT] spreading love one message at a time")
+btn(Kind,"[ROSEY BOT] you’re allowed to have a bad day just don’t take it out on us")
+
+-- 20. Command Mode
+local Command = Window:CreateTab("Command Mode", 6031226397)
+btn(Command,"[ROSEY BOT] command mode activated. awaiting your order.")
+btn(Command,"[ROSEY BOT] system online. ready for directives.")
+btn(Command,"[ROSEY BOT] command received. processing…")
+btn(Command,"[ROSEY BOT] task engine ready. issue new order.")
+btn(Command,"[ROSEY BOT] all bot functions under my control.")
+btn(Command,"[ROSEY BOT] command path open. send next task.")
+btn(Command,"[ROSEY BOT] override enabled. awaiting your input.")
+btn(Command,"[ROSEY BOT] executing your directive immediately.")
+btn(Command,"[ROSEY BOT] tell me what to do. i will obey.")
+btn(Command,"[ROSEY BOT] command accepted. operational.")
+btn(Command,"[ROSEY BOT] you may issue another command.")
+btn(Command,"[ROSEY BOT] system priority updated per your order.")
+btn(Command,"[ROSEY BOT] command unit active. awaiting directives.")
+btn(Command,"[ROSEY BOT] next task required to continue.")
+btn(Command,"[ROSEY BOT] all bot systems synced to my control.")
+btn(Command,"[ROSEY BOT] override complete. state your command.")
+btn(Command,"[ROSEY BOT] ready for further instructions.")
+btn(Command,"[ROSEY BOT] confirmed. your order is now law.")
+btn(Command,"[ROSEY BOT] command channel clear. send new data.")
+btn(Command,"[ROSEY BOT] rosey bot unit listening… go ahead.")
+btn(Command,"[ROSEY BOT] awaiting your next command, commander.")
+btn(Command,"[ROSEY BOT] command mode active. ready for orders.")
+btn(Command,"[ROSEY BOT] your wish is my command.")
+btn(Command,"[ROSEY BOT] system ready for your instructions.")
+btn(Command,"[ROSEY BOT] command protocol engaged. awaiting input.")
+btn(Command,"[ROSEY BOT] all systems primed for your command.")
+btn(Command,"[ROSEY BOT] command received. executing now.")
+btn(Command,"[ROSEY BOT] operational and awaiting your command.")
+btn(Command,"[ROSEY BOT] command mode online. what’s next?")
+btn(Command,"[ROSEY BOT] ready to follow your lead.")
+btn(Command,"[ROSEY BOT] your command is my priority.")
+btn(Command,"[ROSEY BOT] system standing by for your orders.")
+btn(Command,"[ROSEY BOT] command mode activated. how may i assist?")
+
+-- CONTROL PANEL
+local ctrl = Window:CreateTab("CONTROL",6031226397)
+ctrl:CreateToggle({Name="RAINBOW TEXT",Callback=function(v)getgenv().RAINBOW=v end})
+ctrl:CreateToggle({Name="SPAM MODE",Callback=function(v)getgenv().SPAM=v end})
+ctrl:CreateSlider({Name="Spam Delay",Min=0.1,Max=2,Default=0.6,Callback=function(v)getgenv().DELAY=v end})
+ctrl:CreateButton({Name="Clear Chat",Callback=function()Chat("/clear")end})
+ctrl:CreateButton({Name="Rejoin Game",Callback=function()game:GetService("TeleportService"):Teleport(game.PlaceId,game.Players.LocalPlayer)end})
+ctrl:CreateButton({Name="Server Hop",Callback=function()
+    local PlaceID = game.PlaceId
+    local AllIDs = {}
+    local foundAnything = ""
+    local actualHour = os.date("!*t").hour
+    for i,v in pairs(game:GetService("HttpService"):JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..PlaceID.."/servers/Public?sortOrder=Asc&limit=100")).data) do
+        if v.playing ~= v.maxPlayers then
+            table.insert(AllIDs,v.id)
+        end
+    end
+    if #AllIDs > 0 then
+        foundAnything = true
+        local ID = AllIDs[math.random(1,#AllIDs)]
+        game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+    else
+        wait(4)
+        game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+    end
+end})
+
+-- FINAL NOTIFY
+Rayfield:Notify({
+    Title = "ROSEY BOT V3 LOADED",
+    Content = "20 TABS • 900+ LINES\nHOME: TYPE → OKAY = SEND\nNO MORE BUGS",
+    Duration = 10
+})
+
+print("ROSEY BOT V3 — FINAL. FLAWLESS. UNSTOPPABLE.")
