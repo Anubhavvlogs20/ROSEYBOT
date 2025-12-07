@@ -73,8 +73,12 @@ function intToRoman(num)
     return roman
 end
 
+-- ROSEY BOT CHAT FUNCTION (2025 TextChatService version)
+local TextChatService = game:GetService("TextChatService")
+local channel = TextChatService.TextChannels.RBXGeneral
+
 local function Chat(msg)
-    textChatService.TextChannels.RBXGeneral:SendAsync(msg)
+    channel:SendAsync("[ROSEY BOT] " .. tostring(msg))
 end
 
 local function shuffle(tbl) -- Table shuffle function by sleitnick
@@ -95,14 +99,6 @@ local function roundNumber(num, numDecimalPlaces)
 end
 
 local Players = game:GetService("Players")
-
--- Function to make the bot speak with [ROSEY BOT] prefix
-local function RoseySay(message : string)
-    game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(
-        "[ROSEY BOT] " .. message,
-        "All"
-    )
-end
 
 -- callback value of configTable needs to be a bindable function
 local notifyBindable = Instance.new("BindableFunction")
