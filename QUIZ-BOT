@@ -73,12 +73,96 @@ function intToRoman(num)
     return roman
 end
 
--- ROSEY BOT CHAT FUNCTION (2025 TextChatService version)
+-- FIXED ROSEY BOT CHAT FUNCTION (Handles Latency + Retries + Fallback)
 local TextChatService = game:GetService("TextChatService")
-local channel = TextChatService.TextChannels.RBXGeneral
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Wait for channel (prevents load errors)
+local channel = TextChatService:WaitForChild("TextChannels"):WaitForChild("RBXGeneral", 5)
+if not channel then
+    warn("ROSEY BOT: RBXGeneral channel not found—using legacy chat fallback.")
+end
+
+-- Create RemoteEvent for server broadcasts (if not exists)
+local chatRemote = ReplicatedStorage:FindFirstChild("RoseyBotChat")
+if not chatRemote then
+    chatRemote = Instance.new("RemoteEvent")
+    chatRemote.Name = "RoseyBotChat"
+    chatRemote.Parent = ReplicatedStorage
+end
+
+-- Server-side broadcaster (put this in a ServerScript in ServerScriptService)
+-- (Copy the block below into a NEW ServerScript—makes messages visible to ALL players)
+--[[
+SERVER SCRIPT BLOCK (Paste into NEW ServerScript in ServerScriptService):
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TextChatService = game:GetService("TextChatService")
+local chatRemote = ReplicatedStorage:WaitForChild("RoseyBotChat")
+local channel = TextChatService:WaitForChild("TextChannels"):WaitForChild("RBXGeneral")
+
+chatRemote.OnServerEvent:Connect(function(player, msg)
+    -- Optional: Check if player is host/whitelisted to prevent spam
+    if player.Name == "YourUsernameHere" then  -- Change to your username
+        local success, err = pcall(function()
+            channel:SendAsync("[ROSEY BOT] " .. msg)
+        end)
+        if not success then
+            warn("ROSEY BOT Server: " .. tostring(err))
+        end
+    end
+end)
+--]]
+
+local messageQueue = {}  -- Anti-spam queue
+local lastSendTime = 0
+local MIN_DELAY = 1  -- Sec between messages (prevents rate limits)
 
 local function Chat(msg)
-    channel:SendAsync("[ROSEY BOT] " .. tostring(msg))
+    local currentTime = tick()
+    if currentTime - lastSendTime < MIN_DELAY then
+        table.insert(messageQueue, msg)
+        spawn(function()
+            wait(MIN_DELAY - (currentTime - lastSendTime))
+            Chat(table.remove(messageQueue, 1))
+        end)
+        return
+    end
+    lastSendTime = currentTime
+    
+    -- Try TextChatService first
+    if channel then
+        for attempt = 1, 3 do  -- Retry up to 3x
+            local success, result = pcall(function()
+                return channel:SendAsync("[ROSEY BOT] " .. tostring(msg))
+            end)
+            if success and result and result.Status == Enum.TextChatStatus.Success then
+                print("ROSEY BOT: Message sent! (" .. msg .. ")")
+                return
+            end
+            warn("ROSEY BOT: Attempt " .. attempt .. " failed (latency? Status: " .. tostring(result and result.Status) .. ")")
+            if attempt < 3 then wait(1) end  -- Wait before retry
+        end
+    end
+    
+    -- Fallback: Legacy chat (works in most games, visible to all)
+    local legacyChat = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+    if legacyChat then
+        local sayRequest = legacyChat:FindFirstChild("SayMessageRequest")
+        if sayRequest then
+            local success, err = pcall(function()
+                sayRequest:FireServer("[ROSEY BOT] " .. tostring(msg), "All")
+            end)
+            if success then
+                print("ROSEY BOT: Fallback sent! (" .. msg .. ")")
+                return
+            end
+            warn("ROSEY BOT Fallback: " .. tostring(err))
+        end
+    end
+    
+    -- Last resort: Use RemoteEvent for server broadcast (everyone sees it)
+    chatRemote:FireServer(msg)
+    print("ROSEY BOT: Queued via RemoteEvent (" .. msg .. ")")
 end
 
 local function shuffle(tbl) -- Table shuffle function by sleitnick
