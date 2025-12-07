@@ -73,68 +73,11 @@ function intToRoman(num)
     return roman
 end
 
--- BULLETPROOF ROSEY BOT CHAT FIX (For Damian-11 Quizbot + Latency)
 local TextChatService = game:GetService("TextChatService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
--- Wait for channel safely (prevents nil errors)
-local textChannels = TextChatService:WaitForChild("TextChannels", 10)
-local channel = textChannels and textChannels:WaitForChild("RBXGeneral", 5)
-
--- Fallback legacy chat
-local legacyChat = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
-local sayRequest = legacyChat and legacyChat:WaitForChild("SayMessageRequest", 5)
-
--- Anti-spam: Min 2-sec delay between messages (quizbot sends fast on start)
-local lastSendTime = 0
-local MIN_DELAY = 2
+local channel = TextChatService.TextChannels.RBXGeneral
 
 local function Chat(msg)
-    -- Skip the buggy "Interesting... quiz..." spam (quizbot default)
-    if string.find(msg:lower(), "interesting") and string.find(msg:lower(), "quiz") then
-        print("ROSEY BOT: Skipped spam message '" .. msg .. "' to avoid loop.")
-        return
-    end
-    
-    local currentTime = tick()
-    if currentTime - lastSendTime < MIN_DELAY then
-        warn("ROSEY BOT: Rate limited—waiting " .. (MIN_DELAY - (currentTime - lastSendTime)) .. "s...")
-        wait(MIN_DELAY - (currentTime - lastSendTime))
-    end
-    lastSendTime = tick()
-    
-    local fullMsg = "[ROSEY BOT] " .. tostring(msg)
-    
-    -- Try TextChatService with 3 retries (for latency/filter fails)
-    if channel then
-        for attempt = 1, 3 do
-            local success, result = pcall(function()
-                return channel:SendAsync(fullMsg)
-            end)
-            if success and result and result.Status == Enum.TextChatStatus.Success then
-                print("ROSEY BOT: Sent via TextChatService! (" .. fullMsg .. ")")
-                return
-            end
-            local err = result and result.Status or "Unknown error"
-            warn("ROSEY BOT: Attempt " .. attempt .. " failed (latency/filter? Status: " .. err .. ") — Retrying...")
-            if attempt < 3 then wait(2) end  -- Longer wait for latency
-        end
-    end
-    
-    -- Fallback: Legacy chat (visible to all, less latency-sensitive)
-    if sayRequest then
-        local success, err = pcall(function()
-            sayRequest:FireServer(fullMsg, "All")
-        end)
-        if success then
-            print("ROSEY BOT: Sent via legacy chat! (" .. fullMsg .. ")")
-            return
-        end
-        warn("ROSEY BOT Legacy: " .. tostring(err))
-    end
-    
-    -- Last resort: Print to output (for testing)
-    warn("ROSEY BOT: Fallback print — " .. fullMsg)
+    channel:SendAsync("[ROSEY BOT] " .. tostring(msg))
 end
 
 local function shuffle(tbl) -- Table shuffle function by sleitnick
@@ -153,8 +96,6 @@ end
 local function roundNumber(num, numDecimalPlaces)
     return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
-
-local Players = game:GetService("Players")
 
 -- callback value of configTable needs to be a bindable function
 local notifyBindable = Instance.new("BindableFunction")
