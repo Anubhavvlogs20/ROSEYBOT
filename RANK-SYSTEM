@@ -1,0 +1,342 @@
+ROSEY BOT",
+    Content = "Rank System Loaded 🌹"
+})-- 🌹 ROSEY BOT - Rank System (FULLY FIXED + CHAT SEND + HISTORY SEND)
+
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local TextChatService = game:GetService("TextChatService")
+
+--==================================================
+-- DATE / PATHS
+--==================================================
+local DAY = os.date("%d")
+local MONTH = os.date("%m")
+local YEAR = os.date("%Y")
+
+local BASE_FOLDER = "ROSEY RANK DATA"
+local MONTH_FOLDER = BASE_FOLDER.."/"..MONTH.." | "..YEAR
+local HISTORY_FILE = MONTH_FOLDER.."/ROSEY RANK HISTORY-"..DAY.." | "..MONTH.." | "..YEAR..".txt"
+
+if not isfolder(BASE_FOLDER) then makefolder(BASE_FOLDER) end
+if not isfolder(MONTH_FOLDER) then makefolder(MONTH_FOLDER) end
+if not isfile(HISTORY_FILE) then writefile(HISTORY_FILE, "") end
+
+--==================================================
+-- DATA
+--==================================================
+local savedRanks = {}
+
+--==================================================
+-- UI
+--==================================================
+local Window = Rayfield:CreateWindow({
+    Name = "🌹 ROSEY BOT",
+    LoadingTitle = "ROSEY BOT",
+    LoadingSubtitle = "Rank System",
+    ConfigurationSaving = {Enabled=false}
+})
+
+local RankTab = Window:CreateTab("⬆ Ranks", 4483362458)
+local HistoryTab = Window:CreateTab("📜 History", 4483362458)
+local StatsTab = Window:CreateTab("📊 Stats", 4483362458)
+
+--==================================================
+-- RANK LIST (ALL)
+--==================================================
+local ALL_RANKS = {
+    "Guest","Newbie","Member","Verified","Trusted","OG","Veteran","Day 1",
+    "VIP","VIP+","VIP++","Premium","Premium+","Lifetime VIP","Supporter","Sponsor","Donator","Top Donator",
+    "MVP","MVP+","MVP++","Champion","Elite","Master","Legend","Mythic","Immortal","Ascended","Ultimate",
+    "Helper","Trial Mod","Moderator","Senior Moderator","Admin","Senior Admin","Head Admin","Manager","Supervisor","Management","Developer","Lead Developer","Builder","Co-Owner","Owner","Founder","Creator",
+    "YouTuber","TikToker","Streamer","Influencer","Partner","Verified Creator","Content Creator","Celebrity","Content God",
+    "Sigma","Sigma Male","Gigachad","Rizzler","Rizz God","Ohio Resident","Skibidi Warrior","NPC","Main Character","Touch Grass","Ratio King","L + Bozo","Certified Hood Classic",
+    "BedWars God","SkyWars Sweat","Arsenal Tryhard","Blade Ball Pro","Blox Fruits Pirate","Anime Fighter","MM2 God","Tower Defense Legend",
+    "God","Demi-God","Titan","Overlord","Emperor","King","Queen","Prince","Princess","Final Boss","World Breaker","Reality Bender",
+    "Hokage","Pirate King","Titan Shifter","Hashira","Jujutsu Sorcerer","Ghoul","Stand User","Shinigami","Demon Slayer","Saiyan",
+    "Angel","Fallen Angel","Demon","Devil","Vampire","Werewolf","Reaper","Ghost","Dragon","Phoenix","Unicorn","Void Walker",
+    "Bestie","Homie","Brother","Sister","Ride or Die","Soulmate","My Person","Family","Forever Friend","Rosey's Favorite",
+    "Millionaire","Billionaire","Trillionaire","Robux Whale","Money Printer","Rich Kid",
+    "Santa","Pumpkin King","Valentine","Birthday Boy","Birthday Girl","Anniversary Star",
+    "Noob","Trash","Clown","Loser","Muted","Demoted","Ex-Staff","Banned (Fake)","Washed","Mid","Fell Off",
+    "Hacker","1337","Cyber God","Matrix Dweller","Code Master","Exploit Lord"
+}
+
+--==================================================
+-- MESSAGES
+--==================================================
+local PROMOTE_MESSAGES = {
+    "@{{player}} has been promoted to {{rank}}! 🎉",
+    "Congrats @{{player}} — you're now {{rank}}! 🌹",
+    "Everyone welcome our new {{rank}}: @{{player}}! 👋",
+    "Rank up! @{{player}} → {{rank}} 🔥",
+    "A GOD HAS DESCENDED — @{{player}} is now {{rank}}! ⚡",
+    "Real recognize real — @{{player}} earned {{rank}} status. No cap.",
+    "Bow down to @{{player}}, the new {{rank}}! 👑",
+    "The server just got stronger — @{{player}} is {{rank}}! 💪",
+    "New rank dropped: @{{player}} → {{rank}}! 🚀",
+    "All hail @{{player}} — {{rank}} secured forever! 🏆",
+    "L + ratio if you disagree — @{{player}} is {{rank}} 😈",
+    "@{{player}} just claimed {{rank}} status. Respect. 🙌",
+    "Lifetime title unlocked: @{{player}} is {{rank}} now and forever.",
+    "The server trembles — @{{player}} ascended to {{rank}}! 🌋",
+    "Day 1 energy — @{{player}} promoted to {{rank}}! Loyal forever.",
+    "My circle only — @{{player}} is officially {{rank}} now.",
+    "Not everyone gets this — @{{player}} earned {{rank}}. Facts.",
+    "Distance means nothing — @{{player}} is {{rank}} in my book.",
+    "They don't make 'em like @{{player}} anymore — {{rank}} secured.",
+    "Real ones only — @{{player}} = {{rank}}. That's on everything.",
+    "Ohio rizz activated — @{{player}} is now {{rank}}! 🗿",
+    "Gigachad approved — @{{player}} is {{rank}}! 💪🗿",
+    "Mewing master @{{player}} just unlocked {{rank}}! 😎",
+    "Rosey's favorite — @{{player}} is {{rank}} forever! ❤️",
+    "Bot abuser detected — @{{player}} claimed {{rank}}! 🤖"
+}
+
+local DEMOTE_MESSAGES = {
+    "@{{player}} has been demoted to {{rank}}... oof 💀",
+    "Sorry @{{player}} — you've been decreased to {{rank}} 😔",
+    "Rank down! @{{player}} → {{rank}} 📉",
+    "L + ratio + @{{player}} dropped to {{rank}} 😂",
+    "Touch grass time — @{{player}} decreased to {{rank}} 🌱",
+    "Skill issue detected — @{{player}} is now {{rank}} 🤡",
+    "From hero to zero — @{{player}} demoted to {{rank}} 😭",
+    "Better luck next time — @{{player}} decreased to {{rank}} 👎",
+    "Fatherless behavior — @{{player}} dropped to {{rank}} 👨‍🦲",
+    "Bozo moment — @{{player}} is now {{rank}} 🤡",
+    "Ratio'd hard — @{{player}} decreased to {{rank}} 📉",
+    "You fell off — @{{player}} demoted to {{rank}} 😞",
+    "Mid energy — @{{player}} is now {{rank}} 🥱",
+    "Clown promotion reversed — @{{player}} decreased to {{rank}} 🎪",
+    "No cap, you lost it — @{{player}} dropped to {{rank}} 😬",
+    "Ohio resident confirmed — @{{player}} demoted to {{rank}} 🗿",
+    "Skibidi toilet flush — @{{player}} decreased to {{rank}} 🚽",
+    "Gigachad revoked — @{{player}} is now {{rank}} 💔",
+    "Mewing failed — @{{player}} dropped to {{rank}} 😞",
+    "Looksmaxxing over — @{{player}} decreased to {{rank}} 😢",
+    "Certified L — @{{player}} is now {{rank}} 📉",
+    "Rosey disappointed — @{{player}} demoted to {{rank}} 💔",
+    "Bot abused you back — @{{player}} decreased to {{rank}} 🤖",
+    "Day 1 over — @{{player}} dropped to {{rank}} 👋",
+    "Real one no more — @{{player}} is now {{rank}} 😔"
+}
+
+--==================================================
+-- HELPERS
+--==================================================
+local function formatMessage(text)
+    text = tostring(text):gsub("^%[ROSEY BOT%]%s*", "")
+    return "[ROSEY BOT] "..text
+end
+
+local function buildMessage(list, player, rank)
+    local msg = list[math.random(#list)]
+    msg = msg:gsub("{{player}}", player):gsub("{{rank}}", rank)
+    return formatMessage(msg)
+end
+
+local function logHistory(text)
+    local line = "["..os.date("%H:%M:%S").."] "..text
+    appendfile(HISTORY_FILE, line.."\n")
+end
+
+local function sendToChat(msg)
+    pcall(function()
+        if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+            local channel = TextChatService.TextChannels:FindFirstChild("RBXGeneral")
+            if channel then
+                channel:SendAsync(msg)
+            end
+        else
+            game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
+        end
+    end)
+end
+
+--==================================================
+-- PLAYER + RANK SELECTION
+--==================================================
+local selectedPlayer = nil
+local selectedRank = nil
+
+local playerDropdown = RankTab:CreateDropdown({
+    Name = "Select Player",
+    Options = {},
+    CurrentOption = "-- Select Player --",
+    Callback = function(opt)
+        selectedPlayer = nil
+        if opt == "-- Select Player --" then return end
+        for _,p in ipairs(Players:GetPlayers()) do
+            local str = p.DisplayName.." (@"..p.Name..")"
+            if opt == str then
+                selectedPlayer = p
+                break
+            end
+        end
+    end
+})
+
+local function refreshPlayers()
+    local t = {"-- Select Player --"}
+    for _,p in ipairs(Players:GetPlayers()) do
+        table.insert(t, p.DisplayName.." (@"..p.Name..")")
+    end
+    playerDropdown:Refresh(t, true)
+end
+
+refreshPlayers()
+Players.PlayerAdded:Connect(refreshPlayers)
+Players.PlayerRemoving:Connect(refreshPlayers)
+
+RankTab:CreateDropdown({
+    Name = "Select Rank",
+    Options = ALL_RANKS,
+    CurrentOption = ALL_RANKS[1],
+    Callback = function(opt)
+        selectedRank = opt
+    end
+})
+
+--==================================================
+-- PROMOTE / DEMOTE (NOW SENDS TO CHAT)
+--==================================================
+RankTab:CreateButton({
+    Name = "⬆ Promote",
+    Callback = function()
+        if not selectedPlayer or not selectedRank then
+            Rayfield:Notify({Title="Error",Content="Select player & rank"})
+            return
+        end
+
+        savedRanks[selectedPlayer.UserId] = selectedRank
+        local msg = buildMessage(PROMOTE_MESSAGES, selectedPlayer.DisplayName, selectedRank)
+        logHistory(msg)
+        sendToChat(msg)
+        Rayfield:Notify({Title="PROMOTED",Content=msg})
+    end
+})
+
+RankTab:CreateButton({
+    Name = "⬇ Demote",
+    Callback = function()
+        if not selectedPlayer or not selectedRank then
+            Rayfield:Notify({Title="Error",Content="Select player & rank"})
+            return
+        end
+
+        savedRanks[selectedPlayer.UserId] = selectedRank
+        local msg = buildMessage(DEMOTE_MESSAGES, selectedPlayer.DisplayName, selectedRank)
+        logHistory(msg)
+        sendToChat(msg)
+        Rayfield:Notify({Title="DEMOTED",Content=msg})
+    end
+})
+
+--==================================================
+-- HISTORY TAB (FIXED SEND TO CHAT)
+--==================================================
+local function getMonthFolders()
+    local t = {}
+    if isfolder(BASE_FOLDER) then
+        for _,f in ipairs(listfiles(BASE_FOLDER)) do
+            if isfolder(f) then
+                local name = f:match("([^/\\]+)$")
+                table.insert(t, name)
+            end
+        end
+    end
+    return t
+end
+
+local function getDays(monthYear)
+    local t = {}
+    local folder = BASE_FOLDER.."/"..monthYear
+    if isfolder(folder) then
+        for _,f in ipairs(listfiles(folder)) do
+            local name = f:match("ROSEY RANK HISTORY%-(.+)%..+%.txt")
+            if name then table.insert(t, name) end
+        end
+    end
+    return t
+end
+
+local selectedMonthYear = MONTH.." | "..YEAR
+local selectedDayFile
+
+local historyLabel = HistoryTab:CreateParagraph({Title = "History", Content = "Select date to view"})
+
+local monthDropdown = HistoryTab:CreateDropdown({
+    Name = "📅 Month | Year",
+    Options = getMonthFolders(),
+    CurrentOption = selectedMonthYear,
+    Callback = function(opt)
+        selectedMonthYear = opt
+        dayDropdown:Refresh(getDays(opt), true)
+    end
+})
+
+local dayDropdown = HistoryTab:CreateDropdown({
+    Name = "📅 Day",
+    Options = {},
+    Callback = function(day)
+        selectedDayFile = day
+        local path = BASE_FOLDER.."/"..selectedMonthYear.."/ROSEY RANK HISTORY-"..day..".txt"
+        if isfile(path) then
+            historyLabel:Set({Title = "History - "..day, Content = readfile(path)})
+        else
+            historyLabel:Set({Title = "History", Content = "No file"})
+        end
+    end
+})
+
+HistoryTab:CreateButton({
+    Name = "🧾 Send Day History to Chat",
+    Callback = function()
+        if not selectedDayFile then
+            Rayfield:Notify({Title="Error",Content="Select day first"})
+            return
+        end
+
+        local path = BASE_FOLDER.."/"..selectedMonthYear.."/ROSEY RANK HISTORY-"..selectedDayFile..".txt"
+        if isfile(path) then
+            local content = readfile(path)
+            for line in content:gmatch("[^\n]+") do
+                sendToChat(line)
+                task.wait(0.3)  -- Avoid spam detection
+            end
+            Rayfield:Notify({Title="Sent",Content="History sent to chat"})
+        end
+    end
+})
+
+--==================================================
+-- STATS TAB
+--==================================================
+local function getStats()
+    local counts = {}
+    for _,r in pairs(savedRanks) do
+        counts[r] = (counts[r] or 0) + 1
+    end
+
+    local text = "📊 Current Rank Stats\n\n"
+    if next(counts) == nil then text = text.."No ranks assigned yet" end
+    for r,c in pairs(counts) do
+        text ..= r.." : "..c.." players\n"
+    end
+    return text
+end
+
+local statsLabel = StatsTab:CreateParagraph({Title = "Rank Stats", Content = getStats()})
+
+StatsTab:CreateButton({
+    Name = "🔄 Refresh Stats",
+    Callback = function()
+        statsLabel:Set({Content = getStats()})
+    end
+})
+
+Rayfield:Notify({
+    Title = "ROSEY BOT",
+    Content = "Rank System Loaded – Promote/Demote Sends to Chat + History Export Fixed 🌹"
+})
