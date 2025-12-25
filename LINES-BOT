@@ -974,6 +974,88 @@ Tab("Rude to Bot","skull",{
 -- CONTROL PANEL
 local ctrl = Window:CreateTab("CONTROL",6031226397)
 ctrl:CreateToggle({Name="RAINBOW TEXT",Callback=function(v)getgenv().RAINBOW=v end})
-ctrl:CreateToggle({Name="SPAM MODE",Callback=function(v)getgenv().SPAM=v end})
+ctrl:CreateToggle({Name="SPAM MODE",Callback=function(v)getgenv().SPAM=v end}) 
 ctrl:CreateSlider({Name="Spam Delay",Min=0.1,Max=2,Default=0.6,Callback=function(v)getgenv().DELAY=v end})
 ctrl:CreateButton({Name="Clear Chat",Callback=function()Chat("/clear")end})
+ctrl:CreateButton({Name="Rejoin Server",Callback=function()game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,game.Players.LocalPlayer)end})
+ctrl:CreateButton({Name="Server Hop",Callback=function()
+    local PlaceID = game.PlaceId
+    local AllIDs = {}
+    local foundAnything = ""
+    local actualHour = os.date("!*t").hour
+    for _, s in pairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
+        if s.playing < s.maxPlayers then
+            if s.id ~= game.JobId then
+                table.insert(AllIDs, s.id)
+            end
+        end
+    end
+    if #AllIDs > 0 then
+        local Random = math.random(1, #AllIDs)
+        game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, AllIDs[Random], game.Players.LocalPlayer)
+    else
+        Chat("No available servers found. Retrying...")
+        wait(1)
+        ServerHop()
+    end
+end})
+-- SPAM FUNCTION
+spawn(function()
+    while true do
+        wait(0.1)
+        if getgenv().SPAM then
+            Chat(TabList[math.random(1,#TabList)]:GetRandom())
+            wait(getgenv().DELAY or 0.6)
+        end
+    end
+end)
+-- RAINBOW TEXT FUNCTION
+spawn(function()
+    while true do
+        wait(0.1)
+        if getgenv().RAINBOW then
+            local ChatService = game:GetService("Chat")
+            local Players = game:GetService("Players")
+            local LocalPlayer = Players.LocalPlayer
+            local Message = "[ROSEY BOT] 🌈✨ RAINBOW MODE ACTIVATED! ✨🌈"
+            local RainbowColors = {
+                Color3.fromRGB(255, 0, 0),    -- Red
+                Color3.fromRGB(255, 127, 0),  -- Orange
+                Color3.fromRGB(255, 255, 0),  -- Yellow
+                Color3.fromRGB(0, 255, 0),    -- Green
+                Color3.fromRGB(0, 0, 255),    -- Blue
+                Color3.fromRGB(75, 0, 130),   -- Indigo
+                Color3.fromRGB(148, 0, 211)   -- Violet
+            }
+            local ColoredMessage = ""
+            for i = 1, #Message do
+                local Char = Message:sub(i, i)
+                local Color = RainbowColors[((i - 1) % #RainbowColors) + 1]
+                ColoredMessage = ColoredMessage .. "<font color=\"" .. tostring(Color) .. "\">" .. Char .. "</font>"
+            end
+            ChatService:Chat(LocalPlayer.Character.Head, ColoredMessage, Enum.ChatColor.White)
+            wait(5)
+        end
+    end 
+
+end)
+
+-- INITIAL SETTINGS
+getgenv().RAINBOW = false
+getgenv().SPAM = false
+getgenv().DELAY = 0.6
+print("[ROSEY BOT] Loaded Successfully")
+-- END OF SCRIPT
+-- TAB SETUP
+TabList = {}
+function Tab(Name,Icon,Messages)
+    local NewTab = {}
+    NewTab.Name = Name
+    NewTab.Icon = Icon
+    NewTab.Messages = Messages
+    function NewTab:GetRandom()
+        return self.Messages[math.random(1,#self.Messages)]
+    end
+    table.insert(TabList,NewTab)
+    return NewTab
+end
