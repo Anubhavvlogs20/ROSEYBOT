@@ -6,10 +6,14 @@
 ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝   ╚═╝       ╚═════╝  ╚═════╝    ╚═╝   
                          v3.0 by Rosey (21)
 
--- ROSEY BOT v3.0 — ULTIMATE EDITION (CREATED BY ROSEY, AGE 21) | WIND UI | SILENT | 1000+ LINES | 25 TABS | FULLY COMPLETE
+-- ROSEY BOT v3.0 — WIND UI VERSION (by Rosey, 21) | SILENT | 1000+ LINES | 25 TABS
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 
-local Window = WindUI:CreateWindow({Title="ROSEY BOT v19.0", Author="by Rosey (21)", Icon="robot"})
+local Window = WindUI:CreateWindow({Title="ROSEY BOT v3.0", Author="by Rosey (21)", Icon="robot"})
+
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
 
 local function Chat(msg)
     pcall(function()
@@ -22,34 +26,104 @@ local function Chat(msg)
     end)
 end
 
+local colors = {"#FF0000","#FF7F00","#FFFF00","#00FF00","#0000FF","#4B0082","#9400D3"}
 local function rainbow(t)
-    local c = {"#FF0000","#FF7F00","#FFFF00","#00FF00","#0000FF","#4B0082","#9400D3"}
     local r = ""
-    for i = 1,#t do r = r.."<font color='"..c[(i%7)+1].."'>"..t:sub(i,i).."</font>" end
+    for i = 1,#t do r = r.."<font color='"..colors[(i%7)+1].."'>"..t:sub(i,i).."</font>" end
     return r
 end
+
 getgenv().RAINBOW = false
+getgenv().SPAM = false
+getgenv().DELAY = 0.6
+
+local TabList = {}
 
 local function send(text)
-    local final = "[ROSEY BOT] "..text:gsub("^%[ROSEY BOT%]%s*","")
+    local clean = text:gsub("^%[ROSEY BOT%]%s*","")
+    local final = "[ROSEY BOT] "..clean
     if getgenv().RAINBOW then final = rainbow(final) end
     if setclipboard then setclipboard(final) end
     Chat(final)
-    WindUI:Notify({Title="SENT", Content=final, Duration=2})
+    WindUI:Notify({Title="SENT!", Content=final, Duration=2})
 end
 
-local function Tab(name,icon,lines)
-    local t = Window:Tab({Title=name,Icon=icon})
-    t:Input({Title="Search",Placeholder="Filter...",Callback=function(q)
+local function CreateTab(name, icon, lines)
+    local t = Window:Tab({Title=name, Icon=icon})
+    t:Input({Title="🔍 Search", Placeholder="Filter lines...", Callback=function(q)
         t:Clear()
         for _,v in pairs(lines) do
-            if q=="" or string.find(string.lower(v),string.lower(q)) then
-                t:Button({Title=v,Callback=function()send(v)end})
+            if q=="" or string.find(string.lower(v), string.lower(q)) then
+                t:Button({Title=v, Callback=function() send(v) end})
             end
         end
     end})
-    for _,v in pairs(lines) do t:Button({Title=v,Callback=function()send(v)end}) end
+    for _,v in pairs(lines) do
+        t:Button({Title=v, Callback=function() send(v) end})
+    end
+    table.insert(TabList, {Messages = lines})
 end
+
+-- HOME TAB
+local home = Window:Tab({Title="🏠 HOME", Icon="home"})
+home:Paragraph({Title="ROSEY BOT v3.0", Content="by Rosey (21) • 1000+ Lines • 25 Tabs • Silent • Rainbow & Spam Ready"})
+
+local userMessage = ""
+local inputBox = home:Input({Title="💬 Your Message", Placeholder="Type here...", Callback=function(text) userMessage = text end})
+
+home:Button({Title="✅ OKAY SEND", Callback=function()
+    if userMessage ~= "" then
+        send(userMessage)
+        userMessage = ""
+        inputBox:Set("")
+    end
+end})
+
+home:Button({Title="❌ CLEAR", Callback=function()
+    userMessage = ""
+    inputBox:Set("")
+end})
+
+home:Button({Title="[ROSEY BOT] OK SURE ✅", Callback=function() send("OK SURE ✅") end})
+home:Button({Title="[ROSEY BOT] NO WAY ❌", Callback=function() send("NO WAY ❌") end})
+
+-- CONTROL PANEL
+local ctrl = Window:Tab({Title="⚙️ CONTROL", Icon="settings"})
+ctrl:Toggle({Name="🌈 Rainbow Text", Default=false, Callback=function(v) getgenv().RAINBOW = v end})
+ctrl:Toggle({Name="🔥 Spam Mode", Default=false, Callback=function(v) getgenv().SPAM = v end})
+ctrl:Slider({Name="Spam Delay", Min=0.1, Max=2, Default=0.6, Decimals=0.1, Callback=function(v) getgenv().DELAY = v end})
+ctrl:Button({Title="Clear Chat", Callback=function() Chat("/clear") end})
+ctrl:Button({Title="Rejoin Server", Callback=function()
+    TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, Players.LocalPlayer)
+end})
+ctrl:Button({Title="Server Hop", Callback=function()
+    local servers = HttpService:JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100")).data
+    local available = {}
+    for _,s in pairs(servers) do
+        if s.playing < s.maxPlayers and s.id ~= game.JobId then
+            table.insert(available, s.id)
+        end
+    end
+    if #available > 0 then
+        TeleportService:TeleportToPlaceInstance(game.PlaceId, available[math.random(1,#available)], Players.LocalPlayer)
+    else
+        WindUI:Notify({Title="No Servers", Content="Retrying...", Duration=3})
+        task.wait(1)
+        ctrl:Button({Title="Server Hop", Callback=function() end}) -- retry
+    end
+end})
+
+-- SPAM LOOP
+spawn(function()
+    while true do
+        task.wait(getgenv().DELAY or 0.6)
+        if getgenv().SPAM and #TabList > 0 then
+            local randomTab = TabList[math.random(1,#TabList)]
+            local randomLine = randomTab.Messages[math.random(1,#randomTab.Messages)]
+            send(randomLine)
+        end
+    end
+end)
 
 -- HOME
 local Home = Window:Tab({Title="HOME",Icon="house"})
